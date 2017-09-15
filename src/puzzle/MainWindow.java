@@ -72,7 +72,7 @@ public class MainWindow {
 
     public void init(Stage primaryStage) {
         cellSize = (int) image.getWidth() / ORDER;
-        int[] ran = RandomArray.getEvenPermutation(ORDER * ORDER - 1);
+        int[] ran = RandomArray.getEvenPermutation(ORDER * ORDER );
 
 //测试        
         System.out.println("");
@@ -81,18 +81,18 @@ public class MainWindow {
         }
         System.out.println();
 //
-        for (int i = 0; i < ORDER * ORDER; i++) {
+        for (int i = 0; i < ran.length; i++) {
             ImageView picture = new ImageView(image);
 
             Rectangle2D rectangle2D = new Rectangle2D(cellSize * (ran[i] % ORDER),
                     cellSize * (ran[i] / ORDER), cellSize, cellSize);
             picture.setViewport(rectangle2D);
 
-            if (i == ORDER * ORDER - 1) {
+            if (ran[i] == ORDER * ORDER - 1) {
 
                 picture = null;
             }
-            cellsList.add(new Cell(i % ORDER, i / ORDER, picture, i, ran[i]));
+            cellsList.add(new Cell(i % ORDER, i / ORDER, picture, i,ran[i]));
         }
 
         Pane pane = new Pane();

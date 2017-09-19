@@ -23,7 +23,7 @@ import javafx.util.Duration;
  *计数面板
  * @author zpppppp
  */
-public class CountingBoard {
+public class CountBoard {
 
     private Label label1 = new Label("Used times: ");
     private Label label2 = new Label("Moved times: ");
@@ -41,7 +41,7 @@ public class CountingBoard {
     /**
      *初始化计数面板
      */
-    public CountingBoard() {
+    public CountBoard() {
         init();
     }
 

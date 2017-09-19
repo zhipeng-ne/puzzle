@@ -3,27 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Netbeans/Puzzle/src/css/image/background.jpg</file>
-            <file>file:/D:/Netbeans/Puzzle/src/puzzle/Cell.java</file>
-            <file>file:/D:/Netbeans/Puzzle/src/puzzle/InitialWindow.java</file>
-            <file>file:/D:/Netbeans/Puzzle/src/puzzle/FileWriter.java</file>
-            <file>file:/D:/Netbeans/Puzzle/src/puzzle/AlertWindow.java</file>
-            <file>file:/D:/Netbeans/Puzzle/src/puzzle/RankList.java</file>
-            <file>file:/D:/Netbeans/Puzzle/nbproject/build-impl.xml</file>
-            <file>file:/D:/Netbeans/Puzzle/nbproject/jfx-impl.xml</file>
-            <file>file:/D:/Netbeans/Puzzle/src/css/initial.css</file>
-            <file>file:/D:/Netbeans/Puzzle/src/css/image/back.jpg</file>
-            <file>file:/D:/Netbeans/Puzzle/src/puzzle/IDAStar.java</file>
-            <file>file:/D:/Netbeans/Puzzle/src/puzzle/ImageChooser.java</file>
-            <file>file:/D:/Netbeans/Puzzle/src/puzzle/RecordData.java</file>
-            <file>file:/D:/Netbeans/Puzzle/src/image/witcher09.png</file>
-            <file>file:/D:/Netbeans/Puzzle/src/puzzle/MainWindow.java</file>
-            <file>file:/D:/Netbeans/Puzzle/src/css/main.css</file>
-            <file>file:/D:/Netbeans/Puzzle/src/puzzle/RecorderData.java</file>
-            <file>file:/D:/Netbeans/Puzzle/src/puzzle/ReferPicture.java</file>
-            <file>file:/D:/Netbeans/Puzzle/src/puzzle/RandomArray.java</file>
-            <file>file:/D:/Netbeans/Puzzle/src/puzzle/Operation.java</file>
-            <file>file:/D:/Netbeans/Puzzle/src/puzzle/MainMenu.java</file>
+            <file>file:/D:/github/puzzle/src/puzzle/Operation.java</file>
+            <file>file:/D:/github/puzzle/src/puzzle/Cell.java</file>
+            <file>file:/D:/github/puzzle/src/puzzle/IDAStar.java</file>
+            <file>file:/D:/github/puzzle/src/puzzle/RandomArray.java</file>
+            <file>file:/D:/github/puzzle/src/puzzle/CountingBoard.java</file>
+            <file>file:/D:/github/puzzle/src/puzzle/InitialWindow.java</file>
+            <file>file:/D:/github/puzzle/src/puzzle/ImageChooser.java</file>
+            <file>file:/D:/github/puzzle/src/puzzle/MainWindow.java</file>
         </group>
     </open-files>
 </project-private>

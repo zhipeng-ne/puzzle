@@ -11,27 +11,27 @@ package puzzle;
  */
 public class IDAStar {
 
-    public static final int MAXSTEP = 200;
-    public static final int[] directionX = {1, 0, -1, 0};
-    public static final int[] directionY = {0, 1, 0, -1};
+    private  static final int MAXSTEP = 200;
+    private  static final int[] directionX = {1, 0, -1, 0};
+    private  static final int[] directionY = {0, 1, 0, -1};
 
-    public static final char[] direction = {'d', 'r', 'u', 'l'};
-    public static final int[] oppositeDirection = {2, 3, 0, 1};
+    private  static final char[] direction = {'d', 'r', 'u', 'l'};
+    private  static final int[] oppositeDirection = {2, 3, 0, 1};
 
     private int[][] tile;
     private int upper = 0;
     private boolean pass;
-    private int pathOfLength = 0;
+    private int pathOfLength;
     private char[] pathOfMovement = new char[MAXSTEP];
 
-    public IDAStar(int[] array, boolean isPass) {
+    public IDAStar(int[] array) {
         int order = (int) Math.sqrt(array.length);
+        pathOfLength = 0;
 
         this.tile = new int[order][order];
         for (int i = 0; i < array.length; i++) {
             this.tile[i / order][i % order] = array[i];
         }
-        this.pass = isPass;
     }
 
     public void IDAS(int depth, int row, int col, int est, int preDirection) {
@@ -75,11 +75,11 @@ public class IDAStar {
 
     }
 
-    public boolean isValid(int row, int col, int order) {
+    private boolean isValid(int row, int col, int order) {
         return row >= 0 && row < order && col >= 0 && col < order;
     }
 
-    public int heuristic(int[][] tile) {
+    private int heuristic(int[][] tile) {
         int manhattanDistance = 0;
         int length = tile.length * tile.length - 1;
         for (int i = 0; i < tile.length; i++) {
@@ -100,6 +100,7 @@ public class IDAStar {
             path[i] = pathOfMovement[i];
         }
         return path;
+ //       return pathOfMovement;
     }
 
     public void init() {

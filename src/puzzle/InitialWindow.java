@@ -35,7 +35,7 @@ public class InitialWindow extends Application {
     public void start(Stage primaryStage) {
         StackPane pane = new StackPane();
 
-        MainWindow mainInterferce = new MainWindow();
+        MainWindow mainInterface = new MainWindow();
 
         GridPane gridPane = new GridPane();
         Label label1 = new Label("Difficulity: ");
@@ -54,15 +54,15 @@ public class InitialWindow extends Application {
             imageChooser.start(new Stage());
             String path = imageChooser.getImagePath();
             if (path != "") {
-                mainInterferce.setImage(new Image(path, 600, 600, false, true));
+                mainInterface.setImage(new Image(path, 600, 600, false, true));
                 textField.setText(path.substring(path.lastIndexOf("/") + 1));
             }
         });
 
         Button btStart = new Button("Start");
         btStart.setOnAction(e -> {
-            mainInterferce.setOrder((items.indexOf(comboBox.getValue()) + 3));
-            mainInterferce.init(primaryStage);
+            mainInterface.setOrder((items.indexOf(comboBox.getValue()) + 3));
+            mainInterface.init(primaryStage);
         });
         Button btExit = new Button("Exit");
         btExit.setOnAction(e -> {

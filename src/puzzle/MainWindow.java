@@ -40,7 +40,7 @@ public class MainWindow {
     public static int directionIndex = 0;
     ArrayList<Cell> cellsList = new ArrayList<>();
 
-    CountingBoard countingBoard = new CountingBoard();
+    CountBoard countBoard = new CountBoard();
 
     private Image image = new Image("image/witcher09.png", 600, 600, false, true);
 //窗口大小
@@ -72,7 +72,7 @@ public class MainWindow {
 
     public void init(Stage primaryStage) {
         cellSize = (int) image.getWidth() / ORDER;
-        int[] ran = RandomArray.getEvenPermutation(ORDER * ORDER );
+        int[] ran = RandomArray.getEvenPermutation(ORDER * ORDER);
 
 //测试        
         System.out.println("");
@@ -82,17 +82,18 @@ public class MainWindow {
         System.out.println();
 //
         for (int i = 0; i < ran.length; i++) {
-            ImageView picture = new ImageView(image);
+            ImageView imageBlock = new ImageView(image);
 
-            Rectangle2D rectangle2D = new Rectangle2D(cellSize * (ran[i] % ORDER),
-                    cellSize * (ran[i] / ORDER), cellSize, cellSize);
-            picture.setViewport(rectangle2D);
+            int minX = ran[i] % ORDER;
+            int minY = ran[i] / ORDER;
+            Rectangle2D rectangle2D = new Rectangle2D(cellSize * minX,
+                    cellSize * minY, cellSize, cellSize);
+            imageBlock.setViewport(rectangle2D);
 
             if (ran[i] == ORDER * ORDER - 1) {
-
-                picture = null;
+                imageBlock = null;
             }
-            cellsList.add(new Cell(i % ORDER, i / ORDER, picture, i,ran[i]));
+            cellsList.add(new Cell(i % ORDER, i / ORDER, imageBlock, i, ran[i]));
         }
 
         Pane pane = new Pane();
@@ -119,7 +120,7 @@ public class MainWindow {
         referPicture.relocate(cellSize * ORDER + offsetX + 30, offsetY);
         pane.getChildren().add(referPicture);
 
-        GridPane gridPane = countingBoard.createBoard();
+        GridPane gridPane = countBoard.createBoard();
         gridPane.relocate(cellSize * ORDER + offsetX + 30, 340);
         pane.getChildren().add(gridPane);
 
@@ -179,42 +180,38 @@ public class MainWindow {
         StringBuilder routine = new StringBuilder();
 
         getPathButton.setOnMouseClicked(e -> {
-            routine.delete(0, routine.length());
-            int[] array = getArray(cellsList);
-
             double startTime = System.currentTimeMillis();
-            IDAStar iDAStar = new IDAStar(array, false);
+            IDAStar iDAStar = new IDAStar(getArray(cellsList));
             iDAStar.init();
             double endTime = System.currentTimeMillis();
 
-            routine.append(iDAStar.getPath());
-            System.out.println(routine);
-            pathText.setText(routine.substring(0));
-            numberText.setText(String.valueOf(routine.length()));
+            System.out.println(iDAStar.getPath());
+            routine.append(String.copyValueOf(iDAStar.getPath()));
+            pathText.setText(String.copyValueOf(iDAStar.getPath()));
+            numberText.setText(String.valueOf(iDAStar.getPath().length));
             timeText.setText(String.valueOf(endTime - startTime) + " ms");
 
             directionIndex = 0;
         });
 
         previousButton.setOnMouseClicked(e -> {
-            if (routine.length() > 0 && directionIndex <= routine.length() && directionIndex > 0) {
-                directionIndex--;
-                move(routine.charAt(directionIndex), true);
-            }
+//            if (routine.length() > 0 && directionIndex <= routine.length() && directionIndex > 0) {
+//                directionIndex--;
+//                move(routine.charAt(directionIndex), true);
+//            }
         });
 
         nextButton.setOnMouseClicked(e -> {
-            if (routine.length() > 0 && directionIndex < routine.length()) {
-                move(routine.charAt(directionIndex), false);
-                directionIndex++;
-            }
+//            if (routine.length() > 0 && directionIndex < routine.length()) {
+//                move(routine.charAt(directionIndex), false);
+//                directionIndex++;
+//            }
         });
 
         EventHandler<ActionEvent> eventHandler = e -> {
-            if (routine.length() > 0 && directionIndex < routine.length()) {
                 move(routine.charAt(directionIndex), false);
                 directionIndex++;
-            }
+
         };
         EventHandler<ActionEvent> enableButton = e -> {
             nextButton.setDisable(false);
@@ -230,6 +227,7 @@ public class MainWindow {
         });
         return gridPane;
     }
+
     public void move(char nextDirection, boolean isPrevious) {
         Cell emptyCell = findEmptyCell(cellsList);
         if (emptyCell == null) {
@@ -257,7 +255,7 @@ public class MainWindow {
 
             swap(cellA, cellB);
             if (checkedSolved(cellsList)) {
-                countingBoard.stopCounting();
+                countBoard.stopCounting();
                 AlertWindow alertWindow = new AlertWindow();
                 alertWindow.start();
             }
@@ -344,7 +342,7 @@ public class MainWindow {
         if (steps != 1) {
             return;
         }
-        if (countingBoard.getIsPause()||checkedSolved(cellsList)) {
+        if (countBoard.getIsPause() || checkedSolved(cellsList)) {
             return;
         }
         Path path = new Path();
@@ -360,10 +358,10 @@ public class MainWindow {
 
         pathTransition.setOnFinished(actionEvent -> {
             swap(cellA, cellB);
-            countingBoard.updateNumberOfMovements(numberOfMovements++);
+            countBoard.updateNumberOfMovements(numberOfMovements++);
             if (checkedSolved(cellsList)) {
-                countingBoard.stopCounting();
-                AlertWindow alertWindow = new AlertWindow(countingBoard.getUsedTimes(), countingBoard.getNumberOfMovements());
+                countBoard.stopCounting();
+                AlertWindow alertWindow = new AlertWindow(countBoard.getUsedTimes(), countBoard.getNumberOfMovements());
                 alertWindow.start();
             }
         });

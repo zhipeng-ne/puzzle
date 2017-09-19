@@ -19,28 +19,26 @@ public class IDAStar {
     private  static final int[] oppositeDirection = {2, 3, 0, 1};
 
     private int[][] tile;
+    private int ORDER;
     private int upper = 0;
     private boolean pass;
     private int pathOfLength;
-    private char[] pathOfMovement = new char[MAXSTEP];
+    private char[] pathOfMovement;
 
     public IDAStar(int[] array) {
-        int order = (int) Math.sqrt(array.length);
+        ORDER = (int) Math.sqrt(array.length);
         pathOfLength = 0;
 
-        this.tile = new int[order][order];
+        this.tile = new int[ORDER][ORDER];
         for (int i = 0; i < array.length; i++) {
-            this.tile[i / order][i % order] = array[i];
+            this.tile[i / ORDER][i % ORDER] = array[i];
         }
     }
 
     public void IDAS(int depth, int row, int col, int est, int preDirection) {
-        int length = this.tile.length * this.tile.length;
+        int length = ORDER*ORDER;
 
-        if (this.pass) {
-            return;
-        }
-        if (est == 0) {
+        if (est == 0 || this.pass) {
             this.pathOfLength = depth;
             this.pass = true;
             return;
@@ -94,28 +92,31 @@ public class IDAStar {
         return manhattanDistance;
     }
 
-    public char[] getPath() {
+    public String getPath() {     
         char[] path = new char[this.pathOfLength];
         for (int i = 0; i < path.length; i++) {
             path[i] = pathOfMovement[i];
         }
-        return path;
- //       return pathOfMovement;
+//        String routine1 = String.copyValueOf(path);
+//        String routine2 = String.copyValueOf(pathOfMovement);
+//        return path;
+        
+        return String.copyValueOf(path);
     }
 
     public void init() {
-        int order = this.tile.length;
-        int length = order * order;
-        int startRow = order - 1;
-        int startCol = order - 1;
+        int length = ORDER * ORDER;
+        int startRow = ORDER - 1;
+        int startCol = ORDER - 1;
 
         for (int i = 0; i < length; i++) {
-            if (this.tile[i / order][i % order] == length - 1) {
-                startRow = i / order;
-                startCol = i % order;
+            if (this.tile[i / ORDER][i % ORDER] == length - 1) {
+                startRow = i / ORDER;
+                startCol = i % ORDER;
                 break;
             }
         }
+        pathOfMovement = new char[MAXSTEP];
         int cost = heuristic(this.tile);
         this.upper = Math.min(MAXSTEP, cost + 1);
         while (!this.pass) {

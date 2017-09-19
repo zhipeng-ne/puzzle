@@ -124,6 +124,8 @@ public class MainWindow {
         gridPane.relocate(cellSize * ORDER + offsetX + 30, 340);
         pane.getChildren().add(gridPane);
 
+//        AutoBoard autoBoard = new AutoBoard(getArray(cellsList));
+//        GridPane autoPane = autoBoard.setGUI();
         GridPane autoPane = createAutoPuzzleBoard();
         autoPane.relocate(cellSize * ORDER + offsetX + 30, 450);
         pane.getChildren().add(autoPane);
@@ -158,8 +160,8 @@ public class MainWindow {
         Label timeLabel = new Label("Search Times :");
         Text timeText = new Text("");
 
-        Button previousButton = new Button("Previous");
-        Button nextButton = new Button("Next");
+//        Button previousButton = new Button("Previous");
+//        Button nextButton = new Button("Next");
         Button autoButton = new Button("Auto Puzzle");
         pathRecommend.setStyle("-fx-fill: red;");
         if (cellsList.size() == 25) {
@@ -173,8 +175,8 @@ public class MainWindow {
         gridPane.add(numberText, 1, 2);
         gridPane.add(timeLabel, 0, 3);
         gridPane.add(timeText, 1, 3);
-        gridPane.add(previousButton, 0, 4);
-        gridPane.add(nextButton, 1, 4);
+//        gridPane.add(previousButton, 0, 4);
+//        gridPane.add(nextButton, 1, 4);
         gridPane.add(autoButton, 0, 5);
 
         StringBuilder routine = new StringBuilder();
@@ -186,40 +188,39 @@ public class MainWindow {
             double endTime = System.currentTimeMillis();
 
             System.out.println(iDAStar.getPath());
-            routine.append(String.copyValueOf(iDAStar.getPath()));
-            pathText.setText(String.copyValueOf(iDAStar.getPath()));
-            numberText.setText(String.valueOf(iDAStar.getPath().length));
+            routine.append(iDAStar.getPath());
+            pathText.setText(iDAStar.getPath());
+            numberText.setText(String.valueOf(iDAStar.getPath().length()));
             timeText.setText(String.valueOf(endTime - startTime) + " ms");
 
             directionIndex = 0;
         });
 
-        previousButton.setOnMouseClicked(e -> {
-//            if (routine.length() > 0 && directionIndex <= routine.length() && directionIndex > 0) {
-//                directionIndex--;
-//                move(routine.charAt(directionIndex), true);
-//            }
-        });
-
-        nextButton.setOnMouseClicked(e -> {
-//            if (routine.length() > 0 && directionIndex < routine.length()) {
-//                move(routine.charAt(directionIndex), false);
-//                directionIndex++;
-//            }
-        });
-
+//        previousButton.setOnMouseClicked(e -> {
+////            if (routine.length() > 0 && directionIndex <= routine.length() && directionIndex > 0) {
+////                directionIndex--;
+////                move(routine.charAt(directionIndex), true);
+////            }
+//        });
+//
+//        nextButton.setOnMouseClicked(e -> {
+////            if (routine.length() > 0 && directionIndex < routine.length()) {
+////                move(routine.charAt(directionIndex), false);
+////                directionIndex++;
+////            }
+//        });
         EventHandler<ActionEvent> eventHandler = e -> {
-                move(routine.charAt(directionIndex), false);
-                directionIndex++;
+            move(routine.charAt(directionIndex));
+            directionIndex++;
 
         };
         EventHandler<ActionEvent> enableButton = e -> {
-            nextButton.setDisable(false);
-            previousButton.setDisable(false);
+//            nextButton.setDisable(false);
+//            previousButton.setDisable(false);
         };
         autoButton.setOnMouseClicked(e -> {
-            nextButton.setDisable(true);
-            previousButton.setDisable(true);
+//            nextButton.setDisable(true);
+//            previousButton.setDisable(true);
             Timeline animation = new Timeline(new KeyFrame(Duration.millis(300), eventHandler));
             animation.setCycleCount(routine.length());
             animation.setOnFinished(enableButton);
@@ -228,14 +229,14 @@ public class MainWindow {
         return gridPane;
     }
 
-    public void move(char nextDirection, boolean isPrevious) {
+    public void move(char nextDirection) {
         Cell emptyCell = findEmptyCell(cellsList);
         if (emptyCell == null) {
             return;
         }
         int emptyCellIndex = emptyCell.getValidIndex();
 
-        Cell currentCell = findCurrentCell(cellsList, emptyCellIndex, nextDirection, isPrevious);
+        Cell currentCell = findCurrentCell(cellsList, emptyCellIndex, nextDirection);
         if (currentCell == null) {
             return;
         }
@@ -262,52 +263,30 @@ public class MainWindow {
         });
     }
 
-    public Cell findCurrentCell(ArrayList<Cell> list, int currentEmptyCellIndex, char nextDirection, boolean isPrevious) {
+    public Cell findCurrentCell(ArrayList<Cell> list, int currentEmptyCellIndex, char nextDirection) {
         int order = (int) Math.sqrt(list.size());
         Cell currentCell = null;
         int nextEmptyCellIndex = currentEmptyCellIndex;
-        if (isPrevious) {
-            switch (nextDirection) {
-                case 'u':
-                    nextEmptyCellIndex = currentEmptyCellIndex + order;
-                    currentCell = getCurrentCell(list, nextEmptyCellIndex);
-                    break;
-                case 'd':
-                    nextEmptyCellIndex = currentEmptyCellIndex - order;
-                    currentCell = getCurrentCell(list, nextEmptyCellIndex);
-                    break;
-                case 'l':
-                    nextEmptyCellIndex = currentEmptyCellIndex + 1;
-                    currentCell = getCurrentCell(list, nextEmptyCellIndex);
-                    break;
-                case 'r':
-                    nextEmptyCellIndex = currentEmptyCellIndex - 1;
-                    currentCell = getCurrentCell(list, nextEmptyCellIndex);
-                    break;
-                default:
-                    break;
-            }
-        } else {
-            switch (nextDirection) {
-                case 'u':
-                    nextEmptyCellIndex = currentEmptyCellIndex - order;
-                    currentCell = getCurrentCell(list, nextEmptyCellIndex);
-                    break;
-                case 'd':
-                    nextEmptyCellIndex = currentEmptyCellIndex + order;
-                    currentCell = getCurrentCell(list, nextEmptyCellIndex);
-                    break;
-                case 'l':
-                    nextEmptyCellIndex = currentEmptyCellIndex - 1;
-                    currentCell = getCurrentCell(list, nextEmptyCellIndex);
-                    break;
-                case 'r':
-                    nextEmptyCellIndex = currentEmptyCellIndex + 1;
-                    currentCell = getCurrentCell(list, nextEmptyCellIndex);
-                    break;
-                default:
-                    break;
-            }
+
+        switch (nextDirection) {
+            case 'u':
+                nextEmptyCellIndex = currentEmptyCellIndex - order;
+                currentCell = getCurrentCell(list, nextEmptyCellIndex);
+                break;
+            case 'd':
+                nextEmptyCellIndex = currentEmptyCellIndex + order;
+                currentCell = getCurrentCell(list, nextEmptyCellIndex);
+                break;
+            case 'l':
+                nextEmptyCellIndex = currentEmptyCellIndex - 1;
+                currentCell = getCurrentCell(list, nextEmptyCellIndex);
+                break;
+            case 'r':
+                nextEmptyCellIndex = currentEmptyCellIndex + 1;
+                currentCell = getCurrentCell(list, nextEmptyCellIndex);
+                break;
+            default:
+                break;
         }
         return currentCell;
     }

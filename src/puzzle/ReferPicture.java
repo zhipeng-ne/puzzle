@@ -16,19 +16,14 @@ import javafx.scene.image.ImageView;
 public class ReferPicture {
 
     private Image image;
-    private int size;
-    private int order;
-
-    public ReferPicture(Image image, int size, int order) {
-        this.image = image;
-        this.size = size;
-        this.order = order;
-    }
     
+    public ReferPicture(Image image) {
+        this.image = image;
+
+    }
+
     public ImageView getPicture() {
         ImageView referPicture = new ImageView(image);
-        Rectangle2D rect = new Rectangle2D(0, 0, size * order, size * order);
-        referPicture.setViewport(rect);
         referPicture.setFitHeight(300);
         referPicture.setFitWidth(300);
         return referPicture;

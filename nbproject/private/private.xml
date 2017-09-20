@@ -5,12 +5,15 @@
         <group>
             <file>file:/D:/github/puzzle/src/puzzle/Operation.java</file>
             <file>file:/D:/github/puzzle/src/puzzle/Cell.java</file>
+            <file>file:/D:/github/puzzle/src/puzzle/CountBoard.java</file>
+            <file>file:/D:/github/puzzle/src/puzzle/FileReader.java</file>
             <file>file:/D:/github/puzzle/src/puzzle/IDAStar.java</file>
             <file>file:/D:/github/puzzle/src/puzzle/RandomArray.java</file>
-            <file>file:/D:/github/puzzle/src/puzzle/CountingBoard.java</file>
+            <file>file:/D:/github/puzzle/src/puzzle/AutoBoard.java</file>
             <file>file:/D:/github/puzzle/src/puzzle/InitialWindow.java</file>
             <file>file:/D:/github/puzzle/src/puzzle/ImageChooser.java</file>
             <file>file:/D:/github/puzzle/src/puzzle/MainWindow.java</file>
+            <file>file:/D:/github/puzzle/src/puzzle/MainMenu.java</file>
         </group>
     </open-files>
 </project-private>

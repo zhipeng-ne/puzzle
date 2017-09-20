@@ -75,11 +75,7 @@ public class MainWindow {
         int[] ran = RandomArray.getEvenPermutation(ORDER * ORDER);
 
 //测试        
-        System.out.println("");
-        for (int i : ran) {
-            System.out.print(i + " ");
-        }
-        System.out.println();
+        test(ran);
 //
         for (int i = 0; i < ran.length; i++) {
             ImageView imageBlock = new ImageView(image);
@@ -115,7 +111,7 @@ public class MainWindow {
             pane.getChildren().add(currentImageView);
         }
 
-        ReferPicture refer = new ReferPicture(image, cellSize, ORDER);
+        ReferPicture refer = new ReferPicture(image);
         ImageView referPicture = refer.getPicture();
         referPicture.relocate(cellSize * ORDER + offsetX + 30, offsetY);
         pane.getChildren().add(referPicture);
@@ -160,8 +156,6 @@ public class MainWindow {
         Label timeLabel = new Label("Search Times :");
         Text timeText = new Text("");
 
-//        Button previousButton = new Button("Previous");
-//        Button nextButton = new Button("Next");
         Button autoButton = new Button("Auto Puzzle");
         pathRecommend.setStyle("-fx-fill: red;");
         if (cellsList.size() == 25) {
@@ -175,8 +169,6 @@ public class MainWindow {
         gridPane.add(numberText, 1, 2);
         gridPane.add(timeLabel, 0, 3);
         gridPane.add(timeText, 1, 3);
-//        gridPane.add(previousButton, 0, 4);
-//        gridPane.add(nextButton, 1, 4);
         gridPane.add(autoButton, 0, 5);
 
         StringBuilder routine = new StringBuilder();
@@ -196,35 +188,16 @@ public class MainWindow {
             directionIndex = 0;
         });
 
-//        previousButton.setOnMouseClicked(e -> {
-////            if (routine.length() > 0 && directionIndex <= routine.length() && directionIndex > 0) {
-////                directionIndex--;
-////                move(routine.charAt(directionIndex), true);
-////            }
-//        });
-//
-//        nextButton.setOnMouseClicked(e -> {
-////            if (routine.length() > 0 && directionIndex < routine.length()) {
-////                move(routine.charAt(directionIndex), false);
-////                directionIndex++;
-////            }
-//        });
         EventHandler<ActionEvent> eventHandler = e -> {
             move(routine.charAt(directionIndex));
             directionIndex++;
 
         };
-        EventHandler<ActionEvent> enableButton = e -> {
-//            nextButton.setDisable(false);
-//            previousButton.setDisable(false);
-        };
         autoButton.setOnMouseClicked(e -> {
-//            nextButton.setDisable(true);
-//            previousButton.setDisable(true);
             Timeline animation = new Timeline(new KeyFrame(Duration.millis(300), eventHandler));
             animation.setCycleCount(routine.length());
-            animation.setOnFinished(enableButton);
             animation.play();
+            autoButton.setDisable(true);
         });
         return gridPane;
     }
@@ -241,19 +214,14 @@ public class MainWindow {
             return;
         }
 
-        Path routine = new Path();
-        routine.getElements().add(new Operation.MoveToAbs(currentCell.getImageView(),
-                currentCell.getX() * cellSize + offsetX, currentCell.getY() * cellSize + offsetY));
-        routine.getElements().add(new Operation.LineToAbs(currentCell.getImageView(),
-                emptyCell.getX() * cellSize + offsetX, emptyCell.getY() * cellSize + offsetY));
+        Path path = getPath(currentCell, emptyCell);
 
-        PathTransition pathTransition = getPathTransition(currentCell, routine);
+        PathTransition pathTransition = getPathTransition(currentCell, path);
 
         final Cell cellA = currentCell;
         final Cell cellB = emptyCell;
 
-        pathTransition.setOnFinished(actionEvent -> {
-
+        pathTransition.setOnFinished((ActionEvent actionEvent) -> {
             swap(cellA, cellB);
             if (checkedSolved(cellsList)) {
                 countBoard.stopCounting();
@@ -304,8 +272,15 @@ public class MainWindow {
         return currentCell;
     }
 
-    public void move(Node node) {
+    public void test(int[] array) {
+        for (int i : array) {
+            System.out.print(i + " ");
+        }
+        System.out.println();
 
+    }
+
+    public void move(Node node) {
         Cell currentCell = findCurrentCell(cellsList, node);
         if (currentCell == null) {
             return;
@@ -324,11 +299,8 @@ public class MainWindow {
         if (countBoard.getIsPause() || checkedSolved(cellsList)) {
             return;
         }
-        Path path = new Path();
-        path.getElements().add(new Operation.MoveToAbs(currentCell.getImageView(),
-                currentCell.getX() * cellSize + offsetX, currentCell.getY() * cellSize + offsetY));
-        path.getElements().add(new Operation.LineToAbs(currentCell.getImageView(),
-                emptyCell.getX() * cellSize + offsetX, emptyCell.getY() * cellSize + offsetY));
+
+        Path path = getPath(currentCell, emptyCell);
 
         PathTransition pathTransition = getPathTransition(currentCell, path);
 
@@ -336,7 +308,10 @@ public class MainWindow {
         final Cell cellB = emptyCell;
 
         pathTransition.setOnFinished(actionEvent -> {
+
+            test(getArray(cellsList));
             swap(cellA, cellB);
+            test(getArray(cellsList));
             countBoard.updateNumberOfMovements(numberOfMovements++);
             if (checkedSolved(cellsList)) {
                 countBoard.stopCounting();
@@ -345,6 +320,15 @@ public class MainWindow {
             }
         });
 
+    }
+
+    public Path getPath(Cell currentCell, Cell emptyCell) {
+        Path path = new Path();
+        path.getElements().add(new Operation.MoveToAbs(currentCell.getImageView(),
+                currentCell.getX() * cellSize + offsetX, currentCell.getY() * cellSize + offsetY));
+        path.getElements().add(new Operation.LineToAbs(currentCell.getImageView(),
+                emptyCell.getX() * cellSize + offsetX, emptyCell.getY() * cellSize + offsetY));
+        return path;
     }
 
     public PathTransition getPathTransition(Cell currentCell, Path routine) {

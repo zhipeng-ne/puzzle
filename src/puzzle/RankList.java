@@ -21,7 +21,7 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
+import static puzzle.MainWindow.ORDER;
 /**
  *
  * @author zpppppp
@@ -63,20 +63,17 @@ public class RankList {
             fileReader.read();
             data = fileReader.getData();
         } catch (ClassNotFoundException | IOException e) {
-
         }
 
         try {
             setOrderButton();
         } catch (ClassNotFoundException | IOException e) {
-
         }
         stage.initModality(Modality.APPLICATION_MODAL);
         threeOrderButton.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.ITALIC, 15));
         fourOrderButton.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.ITALIC, 15));
         fiveOrderButton.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.ITALIC, 15));
 
-        BorderPane borderPane = new BorderPane();
         HBox topBox = new HBox();
         topBox.setPadding(new Insets(5, 5, 5, 5));
         topBox.setSpacing(50);
@@ -94,7 +91,8 @@ public class RankList {
         bottomBox.setPadding(new Insets(5, 5, 5, 5));
         bottomBox.setSpacing(20);
         bottomBox.getChildren().addAll(addName, addTime, addNumber, addButton);
-
+        
+        BorderPane borderPane = new BorderPane();
         borderPane.setTop(topBox);
         borderPane.setCenter(tableView);
         borderPane.setBottom(bottomBox);
@@ -160,7 +158,7 @@ public class RankList {
             addNumber.clear();
 
             try {
-                FileWriter fileWriter = new FileWriter(data, MainWindow.ORDER);
+                FileWriter fileWriter = new FileWriter(data, ORDER);
                 fileWriter.write();
             } catch (IOException ex) {
             }
@@ -178,39 +176,27 @@ public class RankList {
 
     public void setOrderButton() throws ClassNotFoundException, IOException {
         threeOrderButton.setOnMouseClicked(e -> {
-
-            try {
-                FileReader fileReader = new FileReader(3);
-                fileReader.read();
-                data = fileReader.getData();
-                setRecord();
-            } catch (ClassNotFoundException | IOException ex) {
-
-            }
-            stage.show();
+            readData(3);
         });
         fourOrderButton.setOnMouseClicked(e -> {
-            try {
-                FileReader fileReader = new FileReader(4);
-                fileReader.read();
-                data = fileReader.getData();
-                setRecord();
-            } catch (ClassNotFoundException | IOException ex) {
-
-            }
-            stage.show();
+            readData(4);
         });
         fiveOrderButton.setOnMouseClicked(e -> {
-            try {
-                FileReader fileReader = new FileReader(5);
-                fileReader.read();
-                data = fileReader.getData();
-                setRecord();
-            } catch (ClassNotFoundException | IOException ex) {
-
-            }
-            stage.show();
+            readData(5);
         });
+
+    }
+
+    private void readData(int order) {
+        try {
+            FileReader fileReader = new FileReader(order);
+            fileReader.read();
+            data = fileReader.getData();
+            setRecord();
+        } catch (ClassNotFoundException | IOException ex) {
+
+        }
+        stage.show();
 
     }
 }

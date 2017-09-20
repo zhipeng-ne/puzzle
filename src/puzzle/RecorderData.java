@@ -5,7 +5,6 @@
  */
 package puzzle;
 
-import java.io.Serializable;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 

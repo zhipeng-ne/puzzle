@@ -14,13 +14,13 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import static puzzle.MainWindow.directionIndex;
+
 
 /**
  *
  * @author zpppppp
  */
-public class autoBoard {
+public class AutoBoard {
 
     GridPane gridPane = new GridPane();
 
@@ -28,8 +28,6 @@ public class autoBoard {
     private Label numberLabel = new Label("Number of Movements :");
     private Label pathLabel = new Label("Movement Routine :");
     private Label timeLabel = new Label("Search Times :");
-//    private Button previousButton = new Button("Previous");
-//    private Button nextButton = new Button("Next");
     private Button autoButton = new Button("Auto Puzzle");
     
     
@@ -42,13 +40,12 @@ public class autoBoard {
     private int directionIndex;
     private IDAStar iDAStar;
     
-    public autoBoard(int[] array) {
+    public AutoBoard(int[] array) {
         this.array = array;
+        init();
     }
     private void init(){
-        GridPane gridPane = guiSetting();
-        
-        
+       buttonSetting();   
         
     }
     
@@ -61,33 +58,29 @@ public class autoBoard {
             
             System.out.println(iDAStar.getPath());
             
-            numberText.setText(String.valueOf(iDAStar.getPath().length));
+            pathText.setText(iDAStar.getPath());
+            numberText.setText(String.valueOf(iDAStar.getPath().length()));
             timeText.setText(String.valueOf(endTime - startTime) + " ms");
             directionIndex =0 ;
         });
         EventHandler<ActionEvent> eventHandler = e -> {
             
-//                move(routine.charAt(directionIndex), false);
+//                move(iDAStar.getPath().charAt(directionIndex));
                 directionIndex++;
 
         };
-        EventHandler<ActionEvent> enableButton = e -> {
-//            nextButton.setDisable(false);
-//            previousButton.setDisable(false);
-        };
+
         autoButton.setOnMouseClicked(e -> {
-//            nextButton.setDisable(true);
-//            previousButton.setDisable(true);
             Timeline animation = new Timeline(new KeyFrame(Duration.millis(300), eventHandler));
-            animation.setCycleCount(iDAStar.getPath().length);
-            animation.setOnFinished(enableButton);
+            animation.setCycleCount(iDAStar.getPath().length());
             animation.play();
+            autoButton.setDisable(true);
         });
         
         
     }
     
-    private GridPane guiSetting(){     
+    protected GridPane createBoard(){     
         GridPane gridPane = new GridPane();
         gridPane.setVgap(2);
         gridPane.setHgap(2);

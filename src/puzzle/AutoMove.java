@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import javafx.animation.PathTransition;
 import javafx.event.ActionEvent;
 import javafx.scene.shape.Path;
-import puzzle.Cell;
-import puzzle.CountBoard;
-import puzzle.Move;
 import static puzzle.Operation.checkedSolved;
 import static puzzle.Operation.swap;
 
@@ -23,6 +20,7 @@ public class AutoMove extends Move {
 
     public AutoMove(ArrayList<Cell> cellsList, CountBoard countBoard, int CELLSIZE, double offsetX, double offsetY) {
         super(cellsList, countBoard, CELLSIZE, offsetX, offsetY);
+
     }
 
     public void move(char nextDirection) {
@@ -32,7 +30,7 @@ public class AutoMove extends Move {
         }
         int emptyCellIndex = emptyCell.getValidIndex();
 
-        Cell currentCell = findCurrentCell(cellsList, emptyCellIndex, nextDirection);
+        Cell currentCell = getCurrentCell(emptyCellIndex, nextDirection);
         if (currentCell == null) {
             return;
         }
@@ -47,40 +45,41 @@ public class AutoMove extends Move {
         pathTransition.setOnFinished((ActionEvent actionEvent) -> {
             swap(cellA, cellB);
             countBoard.updateNumberOfMovements();
+            countBoard.setIsPause(Boolean.TRUE);
             if (checkedSolved(cellsList)) {
                 countBoard.stopCounting();
+                countBoard.setDisableButton();
                 AlertWindow alertWindow = new AlertWindow();
                 alertWindow.start();
             }
         });
     }
 
-    private Cell findCurrentCell(ArrayList<Cell> list, int currentEmptyCellIndex, char nextDirection) {
-        int order = (int) Math.sqrt(list.size());
-        Cell currentCell = null;
-        int nextEmptyCellIndex = currentEmptyCellIndex;
+    private Cell getCurrentCell(int currentEmptyCellIndex, char nextDirection) {
+        int index = findCurrentCellIndex(currentEmptyCellIndex, nextDirection);
+        return cellsList.get(index);
+    }
 
+    private int findCurrentCellIndex(int currentEmptyCellIndex, char nextDirection) {
+        int nextEmptyCellIndex = currentEmptyCellIndex;
+        int ORDER = (int) Math.sqrt(cellsList.size());
         switch (nextDirection) {
             case 'u':
-                nextEmptyCellIndex = currentEmptyCellIndex - order;
+                nextEmptyCellIndex = currentEmptyCellIndex - ORDER;
                 break;
             case 'd':
-                nextEmptyCellIndex = currentEmptyCellIndex + order;
+                nextEmptyCellIndex = currentEmptyCellIndex + ORDER;
                 break;
             case 'l':
                 nextEmptyCellIndex = currentEmptyCellIndex - 1;
                 break;
             case 'r':
-                nextEmptyCellIndex = currentEmptyCellIndex + 1;        
+                nextEmptyCellIndex = currentEmptyCellIndex + 1;
                 break;
             default:
                 break;
         }
-        currentCell = getCurrentCell(list, nextEmptyCellIndex);
-        return currentCell;
+        return nextEmptyCellIndex;
     }
 
-    private Cell getCurrentCell(ArrayList<Cell> list, int index) {
-        return list.get(index);
-    }
 }

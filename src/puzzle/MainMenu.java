@@ -54,7 +54,7 @@ public class MainMenu {
             MainWindow mainWindow = new MainWindow();
 
             mainWindow.setOrder(3);
-            mainWindow.init(stage);
+            mainWindow.start(stage);
         });
         menuRank.setOnAction(e -> {
             RankList rankList=new RankList();

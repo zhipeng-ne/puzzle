@@ -58,45 +58,22 @@ public class MainWindow {
         return this.image;
     }
 
-    public void init(Stage primaryStage) {
+    public void start(Stage primaryStage) {
         CELLSIZE = (int) image.getWidth() / ORDER;
-        int[] ran = RandomArray.getEvenPermutation(ORDER * ORDER);
-
-//测试        
-        test(ran);
-//
-        for (int i = 0; i < ran.length; i++) {
-            ImageView imageBlock = new ImageView(image);
-
-            int minX = ran[i] % ORDER;
-            int minY = ran[i] / ORDER;
-            Rectangle2D rectangle2D = new Rectangle2D(CELLSIZE * minX,
-                    CELLSIZE * minY, CELLSIZE, CELLSIZE);
-            imageBlock.setViewport(rectangle2D);
-
-            if (ran[i] == ORDER * ORDER - 1) {
-                imageBlock = null;
-            }
-
-            cellsList.add(new Cell(i % ORDER, i / ORDER, imageBlock, i, ran[i]));
-        }
-
+        initialize();
+        
         Pane pane = new Pane();
 
         for (int i = 0; i < cellsList.size(); i++) {
             Cell currentCell = cellsList.get(i);
-
             Node imageView = currentCell.getImageView();
             if (imageView == null) {
                 continue;
             }
-
             imageView.addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
                 NormalMove movement = new NormalMove(cellsList, countBoard, CELLSIZE, offsetX, offsetY);
                 movement.move((Node) mouseEvent.getSource());
-                // move((Node) mouseEvent.getSource());
             });
-
             ImageView currentImageView = currentCell.getImageView();
             imageView.relocate(currentCell.getX() * CELLSIZE + offsetX, currentCell.getY() * CELLSIZE + offsetY);
             pane.getChildren().add(currentImageView);
@@ -110,19 +87,16 @@ public class MainWindow {
         GridPane gridPane = countBoard.createBoard();
         gridPane.relocate(CELLSIZE * ORDER + offsetX + 30, 340);
         pane.getChildren().add(gridPane);
-///
+        
         AutoMove movement = new AutoMove(cellsList, countBoard, CELLSIZE, offsetX, offsetY);
         AutoBoard autoBoard = new AutoBoard(getArray(cellsList));
-        AutoBoard.update(movement);
-        
-        GridPane autoPane = autoBoard.createBoard();
-///
+        AutoBoard.syncMovement(movement);
 
+        GridPane autoPane = autoBoard.createBoard();
         autoPane.relocate(CELLSIZE * ORDER + offsetX + 30, 450);
         pane.getChildren().add(autoPane);
 
         MainMenu mainMenu = new MainMenu(primaryStage);
-
         MenuBar menuBar = mainMenu.createMenuBar();
         pane.getChildren().add(menuBar);
         Scene scene = new Scene(pane, SCENE_WUDTH, SCENE_HEIGHT);
@@ -132,6 +106,25 @@ public class MainWindow {
         primaryStage.setTitle("Puzzle Game");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+    }
+
+    private void initialize() {
+        int[] ran = RandomArray.getEvenPermutation(ORDER * ORDER);
+        for (int i = 0; i < ran.length; i++) {
+            ImageView imageBlock = new ImageView(image);
+
+            int minX = ran[i] % ORDER;
+            int minY = ran[i] / ORDER;
+            Rectangle2D rectangle2D = new Rectangle2D(CELLSIZE * minX,
+                    CELLSIZE * minY, CELLSIZE, CELLSIZE);
+            imageBlock.setViewport(rectangle2D);
+
+            if (ran[i] == ORDER * ORDER - 1) {
+                imageBlock = null;
+            }
+            cellsList.add(new Cell(i % ORDER, i / ORDER, imageBlock, i, ran[i]));
+        }
 
     }
 

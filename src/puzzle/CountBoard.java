@@ -20,7 +20,8 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 /**
- *计数面板
+ * 计数面板
+ *
  * @author zpppppp
  */
 public class CountBoard {
@@ -39,7 +40,7 @@ public class CountBoard {
     private int numberOfMovements = 0;
 
     /**
-     *初始化计数面板
+     * 初始化计数面板
      */
     public CountBoard() {
         init();
@@ -79,6 +80,7 @@ public class CountBoard {
     public void stopCounting() {
         timeLine1.pause();
         timeLine2.pause();
+
     }
 
     /**
@@ -87,6 +89,11 @@ public class CountBoard {
     public void startCounting() {
         timeLine1.play();
         timeLine2.play();
+    }
+
+    public void setDisableButton() {
+        btPause.setDisable(true);
+        btStart.setDisable(true);
     }
 
     /**
@@ -111,7 +118,7 @@ public class CountBoard {
      * @param num 移动次数
      */
     public void updateNumberOfMovements() {
-        this.numberOfMovements ++;
+        this.numberOfMovements++;
     }
 
     /**
@@ -120,6 +127,10 @@ public class CountBoard {
      */
     public Boolean getIsPause() {
         return isPause;
+    }
+
+    public void setIsPause(Boolean isPause) {
+        this.isPause = isPause;
     }
 
     /**

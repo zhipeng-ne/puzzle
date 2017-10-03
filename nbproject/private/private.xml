@@ -12,6 +12,8 @@
             <file>file:/D:/github/puzzle/src/puzzle/InitialWindow.java</file>
             <file>file:/D:/github/puzzle/src/puzzle/FileWriter.java</file>
             <file>file:/D:/github/puzzle/src/puzzle/ImageChooser.java</file>
+            <file>file:/D:/github/puzzle/src/puzzle/Move.java</file>
+            <file>file:/D:/github/puzzle/src/puzzle/AutoMove.java</file>
             <file>file:/D:/github/puzzle/src/image/witcher09.png</file>
             <file>file:/D:/github/puzzle/src/puzzle/MainWindow.java</file>
             <file>file:/D:/github/puzzle/src/puzzle/MainMenu.java</file>
@@ -23,6 +25,7 @@
             <file>file:/D:/github/puzzle/src/puzzle/RandomArray.java</file>
             <file>file:/D:/github/puzzle/src/css/image/background.jpg</file>
             <file>file:/D:/github/puzzle/src/puzzle/RecordData.java</file>
+            <file>file:/D:/github/puzzle/src/puzzle/NormalMove.java</file>
         </group>
     </open-files>
 </project-private>

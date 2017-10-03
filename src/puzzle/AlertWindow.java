@@ -24,14 +24,16 @@ import javafx.stage.Stage;
  */
 public class AlertWindow {
 
-    private int times;
-    private int numberOfMovements;
-    
+    private int times = 0;
+    private int numberOfMovements = 0;
+
     private Button btClose = new Button("CLOSE");
     private Button btRecord = new Button("RECORD");
 
-    private Stage alertStage=new Stage();
+    private Stage alertStage = new Stage();
+
     AlertWindow() {
+
     }
 
     public AlertWindow(int times, int numberOfMovements) {
@@ -39,22 +41,17 @@ public class AlertWindow {
         this.numberOfMovements = numberOfMovements;
     }
 
-    public void start(){
+    public void start() {
         alertStage.setTitle("Message");
         alertStage.initModality(Modality.APPLICATION_MODAL);
         alertStage.setMinWidth(300);
         alertStage.setMinHeight(150);
-        
-        BorderPane borderPane=new BorderPane();
-        Text text=new Text("Congratulation!");
+
+        BorderPane borderPane = new BorderPane();
+        Text text = new Text("Congratulation!");
         text.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.ITALIC, 25));
-        
-        btClose.setOnAction(e -> alertStage.close());
-        btRecord.setOnAction(e -> {
-            alertStage.close();
-           RankList list=new RankList("", times, numberOfMovements);
-           list.start();
-        });
+
+        setButtonAction();
 
         HBox hBox = new HBox();
         hBox.setSpacing(10);
@@ -69,5 +66,14 @@ public class AlertWindow {
         alertStage.setScene(scene);
         alertStage.show();
 
+    }
+
+    private void setButtonAction() {
+        btClose.setOnAction(e -> alertStage.close());
+        btRecord.setOnAction(e -> {
+            alertStage.close();
+            RankList list = new RankList("", times, numberOfMovements);
+            list.start();
+        });
     }
 }

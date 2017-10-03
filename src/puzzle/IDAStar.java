@@ -98,17 +98,7 @@ public class IDAStar {
         return manhattanDistance;
     }
 
-    public String getPath() {     
-//        char[] path = new char[this.pathOfLength];
-//        for (int i = 0; i < path.length; i++) {
-//            path[i] = pathOfMovement[i];
-//        }
-////        String routine1 = String.copyValueOf(path);
-////        String routine2 = String.copyValueOf(pathOfMovement);
-////        return path;
-//        
-//        return String.copyValueOf(path);
-        
+    public String getPath() {    
         return routine.substring(0,pathOfLength);
     }
 
@@ -133,6 +123,5 @@ public class IDAStar {
             IDAS(0, startRow, startCol, cost, -1);
             this.upper = Math.min(upper + 1, MAXSTEP);
         }
-
     }
 }

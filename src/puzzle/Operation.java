@@ -6,10 +6,7 @@
 package puzzle;
 
 import java.util.ArrayList;
-import javafx.scene.Node;
 import javafx.scene.image.ImageView;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
 
 /**
  *
@@ -34,8 +31,6 @@ public class Operation {
         }
         return allSolved;
     }
-
-
 
     public static void swap(Cell cell1, Cell cell2) {
         ImageView temp = cell1.getImageView();

@@ -62,7 +62,7 @@ public class InitialWindow extends Application {
         Button btStart = new Button("Start");
         btStart.setOnAction(e -> {
             mainInterface.setOrder((items.indexOf(comboBox.getValue()) + 3));
-            mainInterface.init(primaryStage);
+            mainInterface.start(primaryStage);
         });
         Button btExit = new Button("Exit");
         btExit.setOnAction(e -> {

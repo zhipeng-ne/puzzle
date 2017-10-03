@@ -110,8 +110,8 @@ public class CountBoard {
      *
      * @param num 移动次数
      */
-    public void updateNumberOfMovements(int num) {
-        this.numberOfMovements = num;
+    public void updateNumberOfMovements() {
+        this.numberOfMovements ++;
     }
 
     /**

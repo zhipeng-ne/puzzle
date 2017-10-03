@@ -35,25 +35,7 @@ public class Operation {
         return allSolved;
     }
 
-    public static class MoveToAbs extends MoveTo {
 
-        public MoveToAbs(Node node) {
-            super(node.getLayoutBounds().getWidth() / 2, node.getLayoutBounds().getHeight() / 2);
-        }
-
-        public MoveToAbs(Node node, double x, double y) {
-            super(x - node.getLayoutX() + node.getLayoutBounds().getWidth() / 2,
-                    y - node.getLayoutY() + node.getLayoutBounds().getHeight() / 2);
-        }
-    }
-
-    public static class LineToAbs extends LineTo {
-
-        public LineToAbs(Node node, double x, double y) {
-            super(x - node.getLayoutX() + node.getLayoutBounds().getWidth() / 2,
-                    y - node.getLayoutY() + node.getLayoutBounds().getHeight() / 2);
-        }
-    }
 
     public static void swap(Cell cell1, Cell cell2) {
         ImageView temp = cell1.getImageView();

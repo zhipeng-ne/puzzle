@@ -6,30 +6,18 @@
 package puzzle;
 
 import java.util.ArrayList;
-import javafx.animation.KeyFrame;
-import javafx.animation.PathTransition;
-import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Path;
 
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-import static puzzle.Operation.checkedSolved;
 import static puzzle.Operation.getArray;
-import static puzzle.Operation.swap;
 
 /**
  *
@@ -46,11 +34,11 @@ public class MainWindow {
 //窗口大小
     private final double SCENE_WUDTH = 1024;
     private final double SCENE_HEIGHT = 640;
-    public static final double offsetX = 30;
+    public static final double offsetX = 0;
     public static final double offsetY = 30;
     //每行每列的格子数及格子大小
     public static int ORDER;
-    public int cellSize = 100;
+    public int CELLSIZE = 100;
 //移动次数及用时
     private int numberOfMovements = 1;
 
@@ -71,7 +59,7 @@ public class MainWindow {
     }
 
     public void init(Stage primaryStage) {
-        cellSize = (int) image.getWidth() / ORDER;
+        CELLSIZE = (int) image.getWidth() / ORDER;
         int[] ran = RandomArray.getEvenPermutation(ORDER * ORDER);
 
 //测试        
@@ -82,13 +70,14 @@ public class MainWindow {
 
             int minX = ran[i] % ORDER;
             int minY = ran[i] / ORDER;
-            Rectangle2D rectangle2D = new Rectangle2D(cellSize * minX,
-                    cellSize * minY, cellSize, cellSize);
+            Rectangle2D rectangle2D = new Rectangle2D(CELLSIZE * minX,
+                    CELLSIZE * minY, CELLSIZE, CELLSIZE);
             imageBlock.setViewport(rectangle2D);
 
             if (ran[i] == ORDER * ORDER - 1) {
                 imageBlock = null;
             }
+
             cellsList.add(new Cell(i % ORDER, i / ORDER, imageBlock, i, ran[i]));
         }
 
@@ -103,27 +92,33 @@ public class MainWindow {
             }
 
             imageView.addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-                move((Node) mouseEvent.getSource());
+                NormalMove movement = new NormalMove(cellsList, countBoard, CELLSIZE, offsetX, offsetY);
+                movement.move((Node) mouseEvent.getSource());
+                // move((Node) mouseEvent.getSource());
             });
 
             ImageView currentImageView = currentCell.getImageView();
-            imageView.relocate(currentCell.getX() * cellSize + offsetX, currentCell.getY() * cellSize + offsetY);
+            imageView.relocate(currentCell.getX() * CELLSIZE + offsetX, currentCell.getY() * CELLSIZE + offsetY);
             pane.getChildren().add(currentImageView);
         }
 
         ReferPicture refer = new ReferPicture(image);
         ImageView referPicture = refer.getPicture();
-        referPicture.relocate(cellSize * ORDER + offsetX + 30, offsetY);
+        referPicture.relocate(CELLSIZE * ORDER + offsetX + 30, offsetY);
         pane.getChildren().add(referPicture);
 
         GridPane gridPane = countBoard.createBoard();
-        gridPane.relocate(cellSize * ORDER + offsetX + 30, 340);
+        gridPane.relocate(CELLSIZE * ORDER + offsetX + 30, 340);
         pane.getChildren().add(gridPane);
+///
+        AutoMove movement = new AutoMove(cellsList, countBoard, CELLSIZE, offsetX, offsetY);
+        AutoBoard autoBoard = new AutoBoard(getArray(cellsList));
+        AutoBoard.update(movement);
+        
+        GridPane autoPane = autoBoard.createBoard();
+///
 
-//        AutoBoard autoBoard = new AutoBoard(getArray(cellsList));
-//        GridPane autoPane = autoBoard.setGUI();
-        GridPane autoPane = createAutoPuzzleBoard();
-        autoPane.relocate(cellSize * ORDER + offsetX + 30, 450);
+        autoPane.relocate(CELLSIZE * ORDER + offsetX + 30, 450);
         pane.getChildren().add(autoPane);
 
         MainMenu mainMenu = new MainMenu(primaryStage);
@@ -140,138 +135,6 @@ public class MainWindow {
 
     }
 
-    public GridPane createAutoPuzzleBoard() {
-        GridPane gridPane = new GridPane();
-        gridPane.setVgap(2);
-        gridPane.setHgap(2);
-
-        Button getPathButton = new Button("Get Path");
-        Text pathRecommend = new Text();
-        Label pathLabel = new Label("Movement Routine :");
-        Text pathText = new Text("");
-
-        Label numberLabel = new Label("Number of Movements :");
-        Text numberText = new Text("");
-
-        Label timeLabel = new Label("Search Times :");
-        Text timeText = new Text("");
-
-        Button autoButton = new Button("Auto Puzzle");
-        pathRecommend.setStyle("-fx-fill: red;");
-        if (cellsList.size() == 25) {
-            pathRecommend.setText("It is no recommended!");
-        }
-        gridPane.add(getPathButton, 0, 0);
-        gridPane.add(pathRecommend, 1, 0);
-        gridPane.add(pathLabel, 0, 1);
-        gridPane.add(pathText, 1, 1);
-        gridPane.add(numberLabel, 0, 2);
-        gridPane.add(numberText, 1, 2);
-        gridPane.add(timeLabel, 0, 3);
-        gridPane.add(timeText, 1, 3);
-        gridPane.add(autoButton, 0, 5);
-
-        StringBuilder routine = new StringBuilder();
-
-        getPathButton.setOnMouseClicked(e -> {
-            double startTime = System.currentTimeMillis();
-            IDAStar iDAStar = new IDAStar(getArray(cellsList));
-            iDAStar.init();
-            double endTime = System.currentTimeMillis();
-
-            System.out.println(iDAStar.getPath());
-            routine.append(iDAStar.getPath());
-            pathText.setText(iDAStar.getPath());
-            numberText.setText(String.valueOf(iDAStar.getPath().length()));
-            timeText.setText(String.valueOf(endTime - startTime) + " ms");
-
-            directionIndex = 0;
-        });
-
-        EventHandler<ActionEvent> eventHandler = e -> {
-            move(routine.charAt(directionIndex));
-            directionIndex++;
-
-        };
-        autoButton.setOnMouseClicked(e -> {
-            Timeline animation = new Timeline(new KeyFrame(Duration.millis(300), eventHandler));
-            animation.setCycleCount(routine.length());
-            animation.play();
-            autoButton.setDisable(true);
-        });
-        return gridPane;
-    }
-
-    public void move(char nextDirection) {
-        Cell emptyCell = findEmptyCell(cellsList);
-        if (emptyCell == null) {
-            return;
-        }
-        int emptyCellIndex = emptyCell.getValidIndex();
-
-        Cell currentCell = findCurrentCell(cellsList, emptyCellIndex, nextDirection);
-        if (currentCell == null) {
-            return;
-        }
-
-        Path path = getPath(currentCell, emptyCell);
-
-        PathTransition pathTransition = getPathTransition(currentCell, path);
-
-        final Cell cellA = currentCell;
-        final Cell cellB = emptyCell;
-
-        pathTransition.setOnFinished((ActionEvent actionEvent) -> {
-            swap(cellA, cellB);
-            if (checkedSolved(cellsList)) {
-                countBoard.stopCounting();
-                AlertWindow alertWindow = new AlertWindow();
-                alertWindow.start();
-            }
-        });
-    }
-
-    public Cell findCurrentCell(ArrayList<Cell> list, int currentEmptyCellIndex, char nextDirection) {
-        int order = (int) Math.sqrt(list.size());
-        Cell currentCell = null;
-        int nextEmptyCellIndex = currentEmptyCellIndex;
-
-        switch (nextDirection) {
-            case 'u':
-                nextEmptyCellIndex = currentEmptyCellIndex - order;
-                currentCell = getCurrentCell(list, nextEmptyCellIndex);
-                break;
-            case 'd':
-                nextEmptyCellIndex = currentEmptyCellIndex + order;
-                currentCell = getCurrentCell(list, nextEmptyCellIndex);
-                break;
-            case 'l':
-                nextEmptyCellIndex = currentEmptyCellIndex - 1;
-                currentCell = getCurrentCell(list, nextEmptyCellIndex);
-                break;
-            case 'r':
-                nextEmptyCellIndex = currentEmptyCellIndex + 1;
-                currentCell = getCurrentCell(list, nextEmptyCellIndex);
-                break;
-            default:
-                break;
-        }
-        return currentCell;
-    }
-
-    public Cell getCurrentCell(ArrayList<Cell> list, int index) {
-        Cell currentCell = null;
-        int i = 0;
-        for (Cell tempCell : list) {
-            if (i == index) {
-                currentCell = tempCell;
-                break;
-            }
-            i++;
-        }
-        return currentCell;
-    }
-
     public void test(int[] array) {
         for (int i : array) {
             System.out.print(i + " ");
@@ -279,91 +142,4 @@ public class MainWindow {
         System.out.println();
 
     }
-
-    public void move(Node node) {
-        Cell currentCell = findCurrentCell(cellsList, node);
-        if (currentCell == null) {
-            return;
-        }
-        //获取空Cell
-        Cell emptyCell = findEmptyCell(cellsList);
-        if (emptyCell == null) {
-            return;
-        }
-        //因为只有与空格子相邻的，才可以移动，所以坐标相差为1
-        int steps = (int) (Math.abs(currentCell.getX() - emptyCell.getX())
-                + Math.abs(currentCell.getY() - emptyCell.getY()));
-        if (steps != 1) {
-            return;
-        }
-        if (countBoard.getIsPause() || checkedSolved(cellsList)) {
-            return;
-        }
-
-        Path path = getPath(currentCell, emptyCell);
-
-        PathTransition pathTransition = getPathTransition(currentCell, path);
-
-        final Cell cellA = currentCell;
-        final Cell cellB = emptyCell;
-
-        pathTransition.setOnFinished(actionEvent -> {
-
-            test(getArray(cellsList));
-            swap(cellA, cellB);
-            test(getArray(cellsList));
-            countBoard.updateNumberOfMovements(numberOfMovements++);
-            if (checkedSolved(cellsList)) {
-                countBoard.stopCounting();
-                AlertWindow alertWindow = new AlertWindow(countBoard.getUsedTimes(), countBoard.getNumberOfMovements());
-                alertWindow.start();
-            }
-        });
-
-    }
-
-    public Path getPath(Cell currentCell, Cell emptyCell) {
-        Path path = new Path();
-        path.getElements().add(new Operation.MoveToAbs(currentCell.getImageView(),
-                currentCell.getX() * cellSize + offsetX, currentCell.getY() * cellSize + offsetY));
-        path.getElements().add(new Operation.LineToAbs(currentCell.getImageView(),
-                emptyCell.getX() * cellSize + offsetX, emptyCell.getY() * cellSize + offsetY));
-        return path;
-    }
-
-    public PathTransition getPathTransition(Cell currentCell, Path routine) {
-        PathTransition pathTransition = new PathTransition();
-        pathTransition.setDuration(Duration.millis(100));
-        pathTransition.setNode(currentCell.getImageView());
-        pathTransition.setPath(routine);
-        pathTransition.setOrientation(PathTransition.OrientationType.NONE);
-        pathTransition.setCycleCount(1);
-        pathTransition.setAutoReverse(false);
-        pathTransition.play();
-
-        return pathTransition;
-    }
-
-    public Cell findCurrentCell(ArrayList<Cell> list, Node node) {
-        Cell currentCell = null;
-        for (Cell tempCell : list) {
-            if (tempCell.getImageView() == node) {
-                currentCell = tempCell;
-                break;
-            }
-        }
-        return currentCell;
-    }
-
-    public Cell findEmptyCell(ArrayList<Cell> list) {
-        Cell emptyCell = null;
-        for (Cell tempCell : list) {
-            if (tempCell.isEmpty()) {
-                emptyCell = tempCell;
-                break;
-            }
-        }
-        return emptyCell;
-    }
-
 }

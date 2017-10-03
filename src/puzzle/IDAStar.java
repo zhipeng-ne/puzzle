@@ -24,8 +24,10 @@ public class IDAStar {
     private boolean pass;
     private int pathOfLength;
     private char[] pathOfMovement;
-
+    private StringBuilder routine ;
+    
     public IDAStar(int[] array) {
+       
         ORDER = (int) Math.sqrt(array.length);
         pathOfLength = 0;
 
@@ -60,6 +62,10 @@ public class IDAStar {
                         tile[row][col] = temp;
                         tile[newRow][newCol] = length - 1;
                         pathOfMovement[depth] = direction[i];
+                        
+                        routine.append(direction[i]);
+                        routine.setCharAt(depth, direction[i]);
+                        
                         IDAS(depth + 1, newRow, newCol, est + nCost - oCost, oppositeDirection[i]);
                         tile[row][col] = length - 1;
                         tile[newRow][newCol] = temp;
@@ -93,15 +99,17 @@ public class IDAStar {
     }
 
     public String getPath() {     
-        char[] path = new char[this.pathOfLength];
-        for (int i = 0; i < path.length; i++) {
-            path[i] = pathOfMovement[i];
-        }
-//        String routine1 = String.copyValueOf(path);
-//        String routine2 = String.copyValueOf(pathOfMovement);
-//        return path;
+//        char[] path = new char[this.pathOfLength];
+//        for (int i = 0; i < path.length; i++) {
+//            path[i] = pathOfMovement[i];
+//        }
+////        String routine1 = String.copyValueOf(path);
+////        String routine2 = String.copyValueOf(pathOfMovement);
+////        return path;
+//        
+//        return String.copyValueOf(path);
         
-        return String.copyValueOf(path);
+        return routine.substring(0,pathOfLength);
     }
 
     public void init() {
@@ -117,6 +125,8 @@ public class IDAStar {
             }
         }
         pathOfMovement = new char[MAXSTEP];
+        routine = new StringBuilder();
+        
         int cost = heuristic(this.tile);
         this.upper = Math.min(MAXSTEP, cost + 1);
         while (!this.pass) {

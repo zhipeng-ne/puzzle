@@ -31,7 +31,7 @@ public class MainMenu {
     private MenuItem menuExit = new MenuItem("Exit");
     private Menu menu2 = new Menu("About");
     private MenuItem menuAbout = new MenuItem("About");
-
+    private MenuBar menuBar = new MenuBar();
     private Stage stage;
 
     public MainMenu(Stage stage) {
@@ -39,7 +39,6 @@ public class MainMenu {
     }
 
     public MenuBar createMenuBar() {
-        MenuBar menuBar = new MenuBar();
 
         menuExit.setOnAction(e -> {
             this.stage.close();
@@ -53,24 +52,22 @@ public class MainMenu {
         menuRestart.setOnAction(e -> {
             MainWindow mainWindow = new MainWindow();
 
-            mainWindow.setOrder(3);
+            mainWindow.setOrder(MainWindow.ORDER);
             mainWindow.start(stage);
         });
         menuRank.setOnAction(e -> {
-            RankList rankList=new RankList();
+            RankList rankList = new RankList();
             rankList.start();
             rankList.disableAddFunction();
         });
         menuAbout.setOnAction(e -> {
             Stage stage = new Stage();
-            Text text=new Text();
-            text.setText("This is a puzzle game, you can clicked the \n "
-                    + "picture to move. if you make the out-of-order \n"
-                    + "image  ordered, the game is over.");
+            Text text = new Text();
+            text.setText("A puzzle game with automatic puzzle solver");
             text.setFont(Font.font("Arial Narrow", FontWeight.BOLD, FontPosture.ITALIC, 20));
-            StackPane stackPane=new StackPane();
+            StackPane stackPane = new StackPane();
             stackPane.getChildren().add(text);
-            
+
             Scene scene = new Scene(stackPane, 400, 300);
             scene.getStylesheets().add("css/initial.css");
             stage.setScene(scene);

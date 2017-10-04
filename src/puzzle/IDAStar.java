@@ -51,7 +51,7 @@ public class IDAStar {
                 int newCol = col + directionY[i];
                 int oCost = 0, nCost = 0, temp = 0;
 
-                if (isValid(newRow, newCol, tile.length)) {
+                if (isValid(newRow, newCol)) {
                     temp = tile[newRow][newCol];
                     int tx = temp / tile.length;
                     int ty = temp % tile.length;
@@ -79,8 +79,8 @@ public class IDAStar {
 
     }
 
-    private boolean isValid(int row, int col, int order) {
-        return row >= 0 && row < order && col >= 0 && col < order;
+    private boolean isValid(int row, int col) {
+        return row >= 0 && row < ORDER && col >= 0 && col < ORDER;
     }
 
     private int heuristic(int[][] tile) {

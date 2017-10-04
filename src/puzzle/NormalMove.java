@@ -9,10 +9,9 @@ import java.util.ArrayList;
 import javafx.animation.PathTransition;
 import javafx.scene.Node;
 import javafx.scene.shape.Path;
-import static puzzle.AutoBoard.update;
-
-import static puzzle.Operation.checkedSolved;
-import static puzzle.Operation.swap;
+import static puzzle.AutoBoard.syncMovement;
+import static puzzle.AutoBoard.syncArray;
+import static puzzle.AutoBoard.syncisMove;
 
 /**
  *
@@ -25,7 +24,7 @@ public class NormalMove extends Move {
     }
 
     public void move(Node node) {
-        Cell currentCell = findCurrentCell(cellsList, node);
+        Cell currentCell = getCurrentCell(cellsList, node);
         if (currentCell == null) {
             return;
         }
@@ -45,30 +44,21 @@ public class NormalMove extends Move {
         }
 
         Path path = getPath(currentCell, emptyCell);
-
         PathTransition pathTransition = getPathTransition(currentCell, path);
 
-        final Cell cellA = currentCell;
-        final Cell cellB = emptyCell;
-
         pathTransition.setOnFinished(actionEvent -> {
-
-            //test(getArray(cellsList));
-            swap(cellA, cellB);
-            countBoard.updateNumberOfMovements();
-            
-            updateData();
-            //test(getArray(cellsList));
-            //countBoard.updateNumberOfMovements(numberOfMovements++);
+            swap(currentCell, emptyCell);
+            syncData();
             if (checkedSolved(cellsList)) {
                 countBoard.stopCounting();
+                countBoard.setDisableButton();
                 AlertWindow alertWindow = new AlertWindow(countBoard.getUsedTimes(), countBoard.getNumberOfMovements());
                 alertWindow.start();
             }
         });
     }
 
-    private Cell findCurrentCell(ArrayList<Cell> list, Node node) {
+    private Cell getCurrentCell(ArrayList<Cell> list, Node node) {
         Cell currentCell = null;
         for (Cell tempCell : list) {
             if (tempCell.getImageView() == node) {
@@ -79,9 +69,11 @@ public class NormalMove extends Move {
         return currentCell;
     }
 
-    public void updateData() {
+    public void syncData() {
+        countBoard.updateNumberOfMovements();
         AutoMove move = new AutoMove(cellsList, countBoard, super.getCELLSIZE(), super.getOffsetX(), super.getOffsetY());
-        update(move);
-        AutoBoard.updateArray(Operation.getArray(cellsList));
+        syncMovement(move);
+        syncArray(Operation.getArray(cellsList));
+        syncisMove(Boolean.TRUE);
     }
 }

@@ -17,16 +17,16 @@ public class RecorderData {
     private SimpleStringProperty name;
     private SimpleIntegerProperty times;
     private SimpleIntegerProperty numberOfMovements;
-    private RecordData recordData;
+    private Record recordData;
 
     public RecorderData() {
         this.name = new SimpleStringProperty("unknow");
         this.times = new SimpleIntegerProperty(0);
         this.numberOfMovements = new SimpleIntegerProperty(0);
-        this.recordData=new RecordData();
+        this.recordData=new Record();
     }
 
-    public RecorderData(RecordData recordData) {
+    public RecorderData(Record recordData) {
         this.name = new SimpleStringProperty(recordData.getName());
         this.times = new SimpleIntegerProperty(recordData.getTimes());
         this.numberOfMovements = new SimpleIntegerProperty(recordData.getNumberOfMovements());
@@ -45,10 +45,7 @@ public class RecorderData {
         return numberOfMovements.get();
     }
 
-    public RecordData getRecordData() {
+    public Record getRecordData() {
         return recordData;
     }
-    
-    
-    
 }

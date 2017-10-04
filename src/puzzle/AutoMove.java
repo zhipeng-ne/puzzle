@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import javafx.animation.PathTransition;
 import javafx.event.ActionEvent;
 import javafx.scene.shape.Path;
-import static puzzle.Operation.checkedSolved;
-import static puzzle.Operation.swap;
+
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -36,14 +35,10 @@ public class AutoMove extends Move {
         }
 
         Path path = getPath(currentCell, emptyCell);
-
         PathTransition pathTransition = getPathTransition(currentCell, path);
 
-        final Cell cellA = currentCell;
-        final Cell cellB = emptyCell;
-
         pathTransition.setOnFinished((ActionEvent actionEvent) -> {
-            swap(cellA, cellB);
+            swap(currentCell, emptyCell);
             countBoard.updateNumberOfMovements();
             countBoard.setIsPause(Boolean.TRUE);
             if (checkedSolved(cellsList)) {

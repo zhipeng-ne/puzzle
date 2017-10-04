@@ -25,21 +25,24 @@ import static puzzle.Operation.getArray;
  */
 public class MainWindow {
 
-    public static int directionIndex = 0;
-    ArrayList<Cell> cellsList = new ArrayList<>();
-
-    CountBoard countBoard = new CountBoard();
-
     private Image image = new Image("image/witcher09.png", 600, 600, false, true);
-//窗口大小
+
+    private Pane pane = new Pane();
+    private ImageView referPicture;
+    private CountBoard countBoard = new CountBoard();
+    private GridPane countPane;
+    private AutoBoard autoBoard;
+    private GridPane autoPane;
+    private MenuBar menuBar;
+
     private final double SCENE_WUDTH = 1024;
     private final double SCENE_HEIGHT = 640;
     public static final double offsetX = 0;
     public static final double offsetY = 30;
-    //每行每列的格子数及格子大小
+    ArrayList<Cell> cellsList = new ArrayList<>();
     public static int ORDER;
     public int CELLSIZE = 100;
-//移动次数及用时
+    public static int directionIndex = 0;
     private int numberOfMovements = 1;
 
     public void setOrder(int num) {
@@ -58,54 +61,21 @@ public class MainWindow {
         return this.image;
     }
 
-    public void start(Stage primaryStage) {
+    public void start(Stage stage) {
         CELLSIZE = (int) image.getWidth() / ORDER;
         initialize();
-        
-        Pane pane = new Pane();
+        addMounseEventInCell();
+        setReferPicture();
+        setCountBoard();
+        setAutoBoard();
+        setMenu(stage);
 
-        for (int i = 0; i < cellsList.size(); i++) {
-            Cell currentCell = cellsList.get(i);
-            Node imageView = currentCell.getImageView();
-            if (imageView == null) {
-                continue;
-            }
-            imageView.addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-                NormalMove movement = new NormalMove(cellsList, countBoard, CELLSIZE, offsetX, offsetY);
-                movement.move((Node) mouseEvent.getSource());
-            });
-            ImageView currentImageView = currentCell.getImageView();
-            imageView.relocate(currentCell.getX() * CELLSIZE + offsetX, currentCell.getY() * CELLSIZE + offsetY);
-            pane.getChildren().add(currentImageView);
-        }
-
-        ReferPicture refer = new ReferPicture(image);
-        ImageView referPicture = refer.getPicture();
-        referPicture.relocate(CELLSIZE * ORDER + offsetX + 30, offsetY);
-        pane.getChildren().add(referPicture);
-
-        GridPane gridPane = countBoard.createBoard();
-        gridPane.relocate(CELLSIZE * ORDER + offsetX + 30, 340);
-        pane.getChildren().add(gridPane);
-        
-        AutoMove movement = new AutoMove(cellsList, countBoard, CELLSIZE, offsetX, offsetY);
-        AutoBoard autoBoard = new AutoBoard(getArray(cellsList));
-        AutoBoard.syncMovement(movement);
-
-        GridPane autoPane = autoBoard.createBoard();
-        autoPane.relocate(CELLSIZE * ORDER + offsetX + 30, 450);
-        pane.getChildren().add(autoPane);
-
-        MainMenu mainMenu = new MainMenu(primaryStage);
-        MenuBar menuBar = mainMenu.createMenuBar();
-        pane.getChildren().add(menuBar);
         Scene scene = new Scene(pane, SCENE_WUDTH, SCENE_HEIGHT);
-        primaryStage.setResizable(true);
-
+        stage.setResizable(true);
         scene.getStylesheets().add("css/main.css");
-        primaryStage.setTitle("Puzzle Game");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        stage.setTitle("Puzzle Game");
+        stage.setScene(scene);
+        stage.show();
 
     }
 
@@ -128,11 +98,50 @@ public class MainWindow {
 
     }
 
-    public void test(int[] array) {
-        for (int i : array) {
-            System.out.print(i + " ");
+    private void addMounseEventInCell() {
+        for (int i = 0; i < cellsList.size(); i++) {
+            Cell currentCell = cellsList.get(i);
+            Node imageView = currentCell.getImageView();
+            if (imageView == null) {
+                continue;
+            }
+            imageView.addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+                NormalMove movement = new NormalMove(cellsList, countBoard, CELLSIZE, offsetX, offsetY);
+                movement.move((Node) mouseEvent.getSource());
+            });
+            ImageView currentImageView = currentCell.getImageView();
+            imageView.relocate(currentCell.getX() * CELLSIZE + offsetX, currentCell.getY() * CELLSIZE + offsetY);
+            pane.getChildren().add(currentImageView);
         }
-        System.out.println();
-
     }
+
+    private void setReferPicture() {
+        ReferPicture refer = new ReferPicture(image);
+        referPicture = refer.getPicture();
+        referPicture.relocate(CELLSIZE * ORDER + offsetX + 30, offsetY);
+        pane.getChildren().add(referPicture);
+    }
+
+    private void setCountBoard() {
+        countPane = countBoard.createBoard();
+        countPane.relocate(CELLSIZE * ORDER + offsetX + 30, 340);
+        pane.getChildren().add(countPane);
+    }
+
+    private void setAutoBoard() {
+        AutoMove movement = new AutoMove(cellsList, countBoard, CELLSIZE, offsetX, offsetY);
+        autoBoard = new AutoBoard(getArray(cellsList));
+        AutoBoard.syncMovement(movement);
+
+        autoPane = autoBoard.createBoard();
+        autoPane.relocate(CELLSIZE * ORDER + offsetX + 30, 450);
+        pane.getChildren().add(autoPane);
+    }
+
+    private void setMenu(Stage stage) {
+        MainMenu mainMenu = new MainMenu(stage);
+        menuBar = mainMenu.createMenuBar();
+        pane.getChildren().add(menuBar);
+    }
+
 }

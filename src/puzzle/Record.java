@@ -11,19 +11,19 @@ import java.io.Serializable;
  *
  * @author zpppppp
  */
-public class RecordData implements Serializable{
+public class Record implements Serializable{
     
     private String name;
     private int times;
     private int numberOfMovements;
 
-    public RecordData() {
+    public Record() {
         name="";
         times=0;
         numberOfMovements=0;
     }
 
-    public RecordData(String name, int times, int numberOfMovements) {
+    public Record(String name, int times, int numberOfMovements) {
         this.name = name;
         this.times = times;
         this.numberOfMovements = numberOfMovements;

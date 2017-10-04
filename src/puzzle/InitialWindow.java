@@ -26,6 +26,18 @@ import javafx.stage.Stage;
 public class InitialWindow extends Application {
 
     private final String[] difficultyList = {"3 X 3", "4 X 4", "5 X 5"};
+    private ObservableList<String> items = FXCollections.observableArrayList(difficultyList);
+    private ComboBox<String> comboBox = new ComboBox<>(items);
+
+    private MainWindow mainInterface = new MainWindow();
+    private StackPane pane = new StackPane();
+    private GridPane gridPane = new GridPane();
+
+    private Label label1 = new Label("Difficulity: ");
+    private Label label2 = new Label("Image: ");
+    private TextField textField = new TextField();
+    private Button btStart = new Button("Start");
+    private Button btExit = new Button("Exit");
 
     public static void main(String[] args) {
         Application.launch(args);
@@ -33,52 +45,15 @@ public class InitialWindow extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        StackPane pane = new StackPane();
-
-        MainWindow mainInterface = new MainWindow();
-
-        GridPane gridPane = new GridPane();
-        Label label1 = new Label("Difficulity: ");
-        Label label2 = new Label("Image: ");
-
-        ObservableList<String> items = FXCollections.observableArrayList(difficultyList);
-        ComboBox<String> comboBox = new ComboBox<>(items);
 
         comboBox.setValue(difficultyList[0]);
 
-        TextField textField = new TextField();
         textField.setText("Default(Click to choose)");
         textField.setEditable(false);
-        textField.setOnMouseClicked(e -> {
-            ImageChooser imageChooser = new ImageChooser();
-            imageChooser.start(new Stage());
-            String path = imageChooser.getImagePath();
-            if (path != "") {
-                mainInterface.setImage(new Image(path, 600, 600, false, true));
-                textField.setText(path.substring(path.lastIndexOf("/") + 1));
-            }
-        });
 
-        Button btStart = new Button("Start");
-        btStart.setOnAction(e -> {
-            mainInterface.setOrder((items.indexOf(comboBox.getValue()) + 3));
-            mainInterface.start(primaryStage);
-        });
-        Button btExit = new Button("Exit");
-        btExit.setOnAction(e -> {
-            primaryStage.close();
-        });
-
-        gridPane.add(label1, 0, 0);
-        gridPane.add(comboBox, 1, 0);
-        gridPane.add(label2, 0, 1);
-        gridPane.add(textField, 1, 1);
-        gridPane.add(btStart, 0, 2);
-        gridPane.add(btExit, 1, 2);
-
-        gridPane.setHgap(20);
-        gridPane.setVgap(20);
-        gridPane.setAlignment(Pos.CENTER);
+        setButtonAction(primaryStage);
+        setActionToChooseImage();
+        setGUI();
         pane.getChildren().add(gridPane);
 
         Scene scene = new Scene(pane, 500, 350);
@@ -90,4 +65,39 @@ public class InitialWindow extends Application {
         primaryStage.show();
     }
 
+    private void setButtonAction(Stage primaryStage) {
+        btStart.setOnAction(e -> {
+            mainInterface.setOrder((items.indexOf(comboBox.getValue()) + 3));
+            mainInterface.start(primaryStage);
+        });
+
+        btExit.setOnAction(e -> {
+            primaryStage.close();
+        });
+    }
+
+    private void setActionToChooseImage() {
+        textField.setOnMouseClicked(e -> {
+            ImageChooser imageChooser = new ImageChooser();
+            imageChooser.start(new Stage());
+            String path = imageChooser.getImagePath();
+            if (path != "") {
+                mainInterface.setImage(new Image(path, 600, 600, false, true));
+                textField.setText(path.substring(path.lastIndexOf("/") + 1));
+            }
+        });
+    }
+
+    private void setGUI() {
+        gridPane.add(label1, 0, 0);
+        gridPane.add(comboBox, 1, 0);
+        gridPane.add(label2, 0, 1);
+        gridPane.add(textField, 1, 1);
+        gridPane.add(btStart, 0, 2);
+        gridPane.add(btExit, 1, 2);
+
+        gridPane.setHgap(20);
+        gridPane.setVgap(20);
+        gridPane.setAlignment(Pos.CENTER);
+    }
 }

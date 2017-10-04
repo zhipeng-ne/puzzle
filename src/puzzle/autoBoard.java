@@ -23,11 +23,11 @@ public class AutoBoard {
 
     GridPane gridPane = new GridPane();
 
-    private Button getPathButton = new Button("Get Path");
     private Label numberLabel = new Label("Number of Movements :");
     private Label pathLabel = new Label("Movement Routine :");
     private Label timeLabel = new Label("Search Times :");
-    private Button autoButton = new Button("Auto Puzzle");
+    private Button btGetPath = new Button("Get Path");
+    private Button btAutoPuzzle = new Button("Auto Puzzle");
     private Label calculate = new Label("");
 
     private Text pathText = new Text("");
@@ -40,6 +40,7 @@ public class AutoBoard {
     private static AutoMove movement;
     private static boolean isMove;
     private static String path;
+
     public AutoBoard(int[] array) {
         this.array = array;
         init();
@@ -52,7 +53,7 @@ public class AutoBoard {
 
     private void setPathButton() {
 
-        getPathButton.setOnMouseClicked(e -> {
+        btGetPath.setOnMouseClicked(e -> {
             calculate.setText("Calculating!");
             double startTime = System.currentTimeMillis();
 
@@ -81,15 +82,15 @@ public class AutoBoard {
             directionIndex++;
         };
 
-        autoButton.setOnMouseClicked(e -> {
+        btAutoPuzzle.setOnMouseClicked(e -> {
             if (!isMove) {
                 Timeline animation = new Timeline(new KeyFrame(Duration.millis(300), eventHandler));
                 animation.setCycleCount(iDAStar.getPath().length());
                 animation.play();
-                autoButton.setDisable(true);
-                getPathButton.setDisable(true);
+                btAutoPuzzle.setDisable(true);
+                btGetPath.setDisable(true);
             }
-            
+
         });
     }
 
@@ -105,8 +106,8 @@ public class AutoBoard {
         gridPane.add(numberText, 1, 2);
         gridPane.add(timeLabel, 0, 3);
         gridPane.add(timeText, 1, 3);
-        gridPane.add(getPathButton, 0, 4);
-        gridPane.add(autoButton, 1, 4);
+        gridPane.add(btGetPath, 0, 4);
+        gridPane.add(btAutoPuzzle, 1, 4);
 
         return gridPane;
 

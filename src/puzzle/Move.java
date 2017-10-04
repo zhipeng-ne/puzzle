@@ -8,6 +8,7 @@ package puzzle;
 import java.util.ArrayList;
 import javafx.animation.PathTransition;
 import javafx.scene.Node;
+import javafx.scene.image.ImageView;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
@@ -17,7 +18,7 @@ import javafx.util.Duration;
  *
  * @author zpppppp
  */
-public  class Move {
+public class Move {
 
     public ArrayList<Cell> cellsList;
     public CountBoard countBoard;
@@ -65,7 +66,6 @@ public  class Move {
         }
         return emptyCell;
     }
-    
 
     public int getCELLSIZE() {
         return CELLSIZE;
@@ -78,7 +78,7 @@ public  class Move {
     public double getOffsetY() {
         return offsetY;
     }
-    
+
     public void test(int[] array) {
         for (int i : array) {
             System.out.print(i + " ");
@@ -86,6 +86,7 @@ public  class Move {
         System.out.println();
 
     }
+
     public static class MoveToAbs extends MoveTo {
 
         public MoveToAbs(Node node) {
@@ -104,5 +105,26 @@ public  class Move {
             super(x - node.getLayoutX() + node.getLayoutBounds().getWidth() / 2,
                     y - node.getLayoutY() + node.getLayoutBounds().getHeight() / 2);
         }
+    }
+
+    public void swap(Cell cell1, Cell cell2) {
+        ImageView temp = cell1.getImageView();
+        cell1.setImageView(cell2.getImageView());
+        cell2.setImageView(temp);
+
+        int tmp = cell1.getCurrentIndex();
+        cell1.setCurrentIndex(cell2.getCurrentIndex());
+        cell2.setCurrentIndex(tmp);
+    }
+
+    public boolean checkedSolved(ArrayList<Cell> cells) {
+        boolean allSolved = true;
+        for (Cell cell : cells) {
+            if (!cell.isSolved()) {
+                allSolved = false;
+                break;
+            }
+        }
+        return allSolved;
     }
 }

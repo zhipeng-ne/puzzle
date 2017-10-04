@@ -152,7 +152,7 @@ public class RankList {
 
         }
         addButton.setOnAction(e -> {
-            data.add(new RecorderData(new RecordData(addName.getText(), times, number)));
+            data.add(new RecorderData(new Record(addName.getText(), times, number)));
             addName.clear();
             addTime.clear();
             addNumber.clear();

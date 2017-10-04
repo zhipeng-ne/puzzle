@@ -47,7 +47,15 @@ public class CountBoard {
     }
 
     private void init() {
+        setButtonAction();
+        text1.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.ITALIC, 20));
+        text2.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.ITALIC, 20));
 
+        setUsedTimes();
+        setNumberOfMovements();
+    }
+
+    private void setButtonAction() {
         btPause.setOnMouseClicked(e -> {
             stopCounting();
             isPause = true;
@@ -56,16 +64,18 @@ public class CountBoard {
             startCounting();
             isPause = false;
         });
-        text1.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.ITALIC, 20));
-        text2.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.ITALIC, 20));
+    }
 
+    private void setUsedTimes() {
         EventHandler<ActionEvent> eventHandler1 = e -> {
             text1.setText(String.format("%d s", usedTimes++));
         };
         timeLine1 = new Timeline(new KeyFrame(Duration.millis(1000), eventHandler1));
         timeLine1.setCycleCount(Timeline.INDEFINITE);
         timeLine1.play();
+    }
 
+    private void setNumberOfMovements() {
         EventHandler<ActionEvent> eventHandler2 = e -> {
             text2.setText(String.format("%d", numberOfMovements));
         };

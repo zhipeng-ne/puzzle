@@ -59,8 +59,8 @@ public class FileReader {
     public void read() throws ClassNotFoundException, IOException {
         try (ObjectInputStream input
                 = new ObjectInputStream(new FileInputStream(file));) {
-            RecordData record;
-            while ((record = (RecordData) input.readObject()) != null) {
+            Record record;
+            while ((record = (Record) input.readObject()) != null) {
                 data.add(new RecorderData(record));
             }
         } catch (EOFException e) {

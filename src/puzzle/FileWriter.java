@@ -41,7 +41,7 @@ public class FileWriter {
         try (ObjectOutputStream output
                 = new ObjectOutputStream(new FileOutputStream(file));) {
             for (RecorderData recorderData : data) {
-                RecordData recordData = recorderData.getRecordData();
+                Record recordData = recorderData.getRecordData();
                 output.writeObject(recordData);
             }
             output.writeObject(null);

@@ -7,10 +7,7 @@ package puzzle;
 
 import java.util.ArrayList;
 import javafx.animation.PathTransition;
-import javafx.scene.Node;
 import javafx.scene.image.ImageView;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.util.Duration;
 
@@ -67,7 +64,7 @@ public class Move {
 
         return pathTransition;
     }
-
+    //寻找空Cell
     public Cell findEmptyCell(ArrayList<Cell> list) {
         Cell emptyCell = null;
         for (Cell tempCell : list) {
@@ -77,26 +74,6 @@ public class Move {
             }
         }
         return emptyCell;
-    }
-
-    public static class MoveToAbs extends MoveTo {
-
-        public MoveToAbs(Node node) {
-            super(node.getLayoutBounds().getWidth() / 2, node.getLayoutBounds().getHeight() / 2);
-        }
-
-        public MoveToAbs(Node node, double x, double y) {
-            super(x - node.getLayoutX() + node.getLayoutBounds().getWidth() / 2,
-                    y - node.getLayoutY() + node.getLayoutBounds().getHeight() / 2);
-        }
-    }
-
-    public static class LineToAbs extends LineTo {
-
-        public LineToAbs(Node node, double x, double y) {
-            super(x - node.getLayoutX() + node.getLayoutBounds().getWidth() / 2,
-                    y - node.getLayoutY() + node.getLayoutBounds().getHeight() / 2);
-        }
     }
 
     //交换图块

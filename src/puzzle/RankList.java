@@ -62,10 +62,6 @@ public class RankList {
             setOrderButton();
         } catch (ClassNotFoundException | IOException e) {
         }
-        stage.initModality(Modality.APPLICATION_MODAL);
-        threeOrderButton.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.ITALIC, 15));
-        fourOrderButton.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.ITALIC, 15));
-        fiveOrderButton.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.ITALIC, 15));
 
         initializeTableView();
         displayAddPane();
@@ -75,7 +71,11 @@ public class RankList {
         }
 
         BorderPane borderPane = createBorderPane();
-
+        
+        stage.initModality(Modality.APPLICATION_MODAL);
+//        threeOrderButton.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.ITALIC, 15));
+//        fourOrderButton.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.ITALIC, 15));
+//        fiveOrderButton.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.ITALIC, 15));
         Scene scene = new Scene(borderPane, 600, 500);
         scene.getStylesheets().add("css/rank.css");
         stage.setScene(scene);

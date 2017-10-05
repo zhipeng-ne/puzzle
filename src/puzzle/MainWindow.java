@@ -62,7 +62,7 @@ public class MainWindow {
     public void start(Stage stage) {
         CELLSIZE = (int) image.getWidth() / ORDER;
         initialize();
-        addMounseEventInCell();
+        addMounseEventInCellAndAddImage();
         setReferPicture();
         setCountBoard();
         setAutoBoard();
@@ -79,6 +79,9 @@ public class MainWindow {
 
     private void initialize() {
         int[] ran = RandomArray.getEvenPermutation(ORDER * ORDER);
+//        for(int a : ran){
+//            System.out.print(a+" ");
+//        }
         for (int i = 0; i < ran.length; i++) {
             ImageView imageBlock = new ImageView(image);
 
@@ -87,7 +90,7 @@ public class MainWindow {
             Rectangle2D rectangle2D = new Rectangle2D(CELLSIZE * minX,
                     CELLSIZE * minY, CELLSIZE, CELLSIZE);
             imageBlock.setViewport(rectangle2D);
-
+            //这里将排列的最大数设为空图块，即右下角的图块总为空
             if (ran[i] == ORDER * ORDER - 1) {
                 imageBlock = null;
             }
@@ -96,7 +99,7 @@ public class MainWindow {
 
     }
 
-    private void addMounseEventInCell() {
+    private void addMounseEventInCellAndAddImage() {
         for (int i = 0; i < cellsList.size(); i++) {
             Cell currentCell = cellsList.get(i);
             Node imageView = currentCell.getImageView();

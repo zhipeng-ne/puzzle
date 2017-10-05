@@ -27,7 +27,7 @@ public class InitialWindow extends Application {
 
     private final String[] difficultyList = {"3 X 3", "4 X 4", "5 X 5"};
     private ObservableList<String> items = FXCollections.observableArrayList(difficultyList);
-    private ComboBox<String> comboBox = new ComboBox<>(items);
+    private ComboBox<String> comboBox = new ComboBox<>(items);  //下拉列表控件
 
     private MainWindow mainInterface = new MainWindow();
     private StackPane pane = new StackPane();

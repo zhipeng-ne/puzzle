@@ -12,6 +12,7 @@ import javafx.beans.property.SimpleIntegerProperty;
  *
  * @author zpppppp
  */
+//PS：序列化方法可以自己写
 public class RecorderData {
 
     private SimpleStringProperty name;

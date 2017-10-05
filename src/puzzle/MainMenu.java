@@ -28,7 +28,7 @@ public class MainMenu {
     private MenuItem menuRestart = new MenuItem("Restart");
     private MenuItem menuRank = new MenuItem("Ranking List");
     private MenuItem menuExit = new MenuItem("Exit");
-    
+
     private Menu menu2 = new Menu("About");
     private MenuItem menuAbout = new MenuItem("About");
     private MenuBar menuBar = new MenuBar();

@@ -23,8 +23,8 @@ public class AutoMove extends Move {
         if (emptyCell == null) {
             return;
         }
+        
         int emptyCellIndex = emptyCell.getValidIndex();
-
         Cell currentCell = getCurrentCell(emptyCellIndex, nextDirection);
         if (currentCell == null) {
             return;

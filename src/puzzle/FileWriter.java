@@ -29,7 +29,7 @@ public class FileWriter {
     public FileWriter(ObservableList<RecorderData> data, int order) {
         this.data = data;
         this.ORDER = order;
-        if (this.ORDER == 3) {
+        if (this.ORDER == 3) {      //根据选择的难度来读取文件
             file = new File("src/data/data.dat");
         } else if (this.ORDER == 4) {
             file = new File("src/data/data1.dat");

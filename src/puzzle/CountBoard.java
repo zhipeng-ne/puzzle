@@ -33,15 +33,12 @@ public class CountBoard {
     private Button btPause = new Button("Pause");
     private Button btStart = new Button("Start");
     private Boolean isPause = false;
-    private Timeline timeLine1;
+    private Timeline timeLine1;         //这里的计时和计数是通过timeline动画来实现
     private Timeline timeLine2;
 
-    private int usedTimes = 0;
-    private int numberOfMovements = 0;
+    private int usedTimes = 0;          //拼图用时
+    private int numberOfMovements = 0;  //拼图的移动次数
 
-    /**
-     * 初始化计数面板
-     */
     public CountBoard() {
         init();
     }
@@ -84,18 +81,14 @@ public class CountBoard {
         timeLine2.play();
     }
 
-    /**
-     * 暂停记时
-     */
+    // 暂停记时
     public void stopCounting() {
         timeLine1.pause();
         timeLine2.pause();
 
     }
 
-    /**
-     * 开始记时
-     */
+    // 开始记时
     public void startCounting() {
         timeLine1.play();
         timeLine2.play();
@@ -106,47 +99,24 @@ public class CountBoard {
         btStart.setDisable(true);
     }
 
-    /**
-     *
-     * @return usedTimes
-     */
     public int getUsedTimes() {
         return usedTimes;
     }
 
-    /**
-     *
-     * @return numberOfMovements
-     */
     public int getNumberOfMovements() {
         return numberOfMovements;
     }
 
-    /**
-     * 更新移动次数
-     *
-     * @param num 移动次数
-     */
+
+    //更新移动次数
     public void updateNumberOfMovements() {
         this.numberOfMovements++;
     }
 
-    /**
-     *
-     * @return isPause
-     */
     public Boolean getIsPause() {
         return isPause;
     }
 
-    public void setIsPause(Boolean isPause) {
-        this.isPause = isPause;
-    }
-
-    /**
-     *
-     * @return 一个计数面板
-     */
     public GridPane createBoard() {
         GridPane gridPane = new GridPane();
 

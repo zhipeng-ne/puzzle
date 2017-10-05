@@ -28,22 +28,20 @@ public class MainWindow {
     private Image image = new Image("image/witcher09.png", 600, 600, false, true);
 
     private Pane pane = new Pane();
-    private ImageView referPicture;
-    private CountBoard countBoard = new CountBoard();
-    private GridPane countPane;
-    private AutoBoard autoBoard;
-    private GridPane autoPane;
-    private MenuBar menuBar;
+    private ImageView referPicture;                     //参考图片
+    private CountBoard countBoard = new CountBoard();   
+    private GridPane countPane;                         //计数面板
+    private AutoBoard autoBoard;                         
+    private GridPane autoPane;                          //自动拼图面板
+    private MenuBar menuBar;                            //主菜单
 
-    private final double SCENE_WUDTH = 1024;
+    private final double SCENE_WUDTH = 1024;            //游戏窗口大小
     private final double SCENE_HEIGHT = 640;
-    public static final double offsetX = 0;
-    public static final double offsetY = 30;
-    ArrayList<Cell> cellsList = new ArrayList<>();
-    public static int ORDER;
-    public int CELLSIZE = 100;
-    public static int directionIndex = 0;
-    private int numberOfMovements = 1;
+    public static final double offsetX = 0;             //面板的偏移量
+    public static final double offsetY = 30; 
+    ArrayList<Cell> cellsList = new ArrayList<>();      //存放图块的数组   
+    public static int ORDER;                            //游戏的难度
+    public int CELLSIZE = 100;                          //每个图块的大小
 
     public void setOrder(int num) {
         this.ORDER = num;
@@ -93,7 +91,7 @@ public class MainWindow {
             if (ran[i] == ORDER * ORDER - 1) {
                 imageBlock = null;
             }
-            cellsList.add(new Cell(i % ORDER, i / ORDER, imageBlock, i, ran[i]));
+            cellsList.add(new Cell(i % ORDER, i / ORDER, imageBlock,i,ran[i]));
         }
 
     }

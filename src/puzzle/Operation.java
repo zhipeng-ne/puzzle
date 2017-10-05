@@ -6,14 +6,13 @@
 package puzzle;
 
 import java.util.ArrayList;
-import javafx.scene.image.ImageView;
 
 /**
  *
  * @author zpppppp
  */
 public class Operation {
-
+    //获得Cell数组中各个cell的排列
     public static int[] getArray(ArrayList<Cell> list) {
         int[] array = new int[list.size()];
         int i = 0;

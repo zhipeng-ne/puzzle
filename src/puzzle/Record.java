@@ -11,11 +11,13 @@ import java.io.Serializable;
  *
  * @author zpppppp
  */
+//这个类只是为了方便读写时能将数据序列化，因为SimpleStringProperty没有提供序列化方法，
+//所以用这个类来嵌套到RecorderData类中
 public class Record implements Serializable{
     
-    private String name;
-    private int times;
-    private int numberOfMovements;
+    private String name;              //记录者的名字
+    private int times;                //用时
+    private int numberOfMovements;    //移动次数
 
     public Record() {
         name="";

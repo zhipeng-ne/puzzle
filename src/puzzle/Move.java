@@ -34,6 +34,18 @@ public class Move {
         this.offsetY = offsetY;
     }
 
+    public int getCELLSIZE() {
+        return CELLSIZE;
+    }
+
+    public double getOffsetX() {
+        return offsetX;
+    }
+
+    public double getOffsetY() {
+        return offsetY;
+    }
+
     public Path getPath(Cell currentCell, Cell emptyCell) {
         Path path = new Path();
         path.getElements().add(new MoveToAbs(currentCell.getImageView(),
@@ -67,26 +79,6 @@ public class Move {
         return emptyCell;
     }
 
-    public int getCELLSIZE() {
-        return CELLSIZE;
-    }
-
-    public double getOffsetX() {
-        return offsetX;
-    }
-
-    public double getOffsetY() {
-        return offsetY;
-    }
-
-    public void test(int[] array) {
-        for (int i : array) {
-            System.out.print(i + " ");
-        }
-        System.out.println();
-
-    }
-
     public static class MoveToAbs extends MoveTo {
 
         public MoveToAbs(Node node) {
@@ -107,6 +99,7 @@ public class Move {
         }
     }
 
+    //交换图块
     public void swap(Cell cell1, Cell cell2) {
         ImageView temp = cell1.getImageView();
         cell1.setImageView(cell2.getImageView());
@@ -117,14 +110,28 @@ public class Move {
         cell2.setCurrentIndex(tmp);
     }
 
+    //检查拼图是否完成
     public boolean checkedSolved(ArrayList<Cell> cells) {
-        boolean allSolved = true;
         for (Cell cell : cells) {
             if (!cell.isSolved()) {
-                allSolved = false;
-                break;
+                return false;
             }
         }
-        return allSolved;
+        return true;
+    }
+
+    public void stopCountAndPopupWindow() {
+        countBoard.stopCounting();     //如果完成，停止计数
+        countBoard.setDisableButton(); //将按钮设为不可见
+        AlertWindow alertWindow = new AlertWindow(countBoard.getUsedTimes(), countBoard.getNumberOfMovements());
+        alertWindow.start();           //弹出提示窗口
+    }
+
+    public void test(int[] array) {
+        for (int i : array) {
+            System.out.print(i + " ");
+        }
+        System.out.println();
+
     }
 }

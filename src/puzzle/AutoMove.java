@@ -5,18 +5,14 @@ import javafx.animation.PathTransition;
 import javafx.event.ActionEvent;
 import javafx.scene.shape.Path;
 
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 /**
  *
  * @author zpppppp
  */
 public class AutoMove extends Move {
 
+    private PathTransition pathTransition;
+    
     public AutoMove(ArrayList<Cell> cellsList, CountBoard countBoard, int CELLSIZE, double offsetX, double offsetY) {
         super(cellsList, countBoard, CELLSIZE, offsetX, offsetY);
 
@@ -35,29 +31,20 @@ public class AutoMove extends Move {
         }
 
         Path path = getPath(currentCell, emptyCell);
-        PathTransition pathTransition = getPathTransition(currentCell, path);
-
-        pathTransition.setOnFinished((ActionEvent actionEvent) -> {
-            swap(currentCell, emptyCell);
-            countBoard.updateNumberOfMovements();
-            countBoard.setIsPause(Boolean.TRUE);
-            if (checkedSolved(cellsList)) {
-                countBoard.stopCounting();
-                countBoard.setDisableButton();
-                AlertWindow alertWindow = new AlertWindow();
-                alertWindow.start();
-            }
-        });
+        pathTransition = getPathTransition(currentCell, path);
+        setPathTransition(currentCell, emptyCell);
     }
 
+    //获取当前需要移动的Cell
     private Cell getCurrentCell(int currentEmptyCellIndex, char nextDirection) {
         int index = findCurrentCellIndex(currentEmptyCellIndex, nextDirection);
         return cellsList.get(index);
     }
 
+    //获取需要移动的Cell的下标
     private int findCurrentCellIndex(int currentEmptyCellIndex, char nextDirection) {
         int nextEmptyCellIndex = currentEmptyCellIndex;
-        int ORDER = (int) Math.sqrt(cellsList.size());
+        int ORDER = (int) Math.sqrt(cellsList.size());  //上下左右分别为减加阶数和减加1
         switch (nextDirection) {
             case 'u':
                 nextEmptyCellIndex = currentEmptyCellIndex - ORDER;
@@ -77,4 +64,13 @@ public class AutoMove extends Move {
         return nextEmptyCellIndex;
     }
 
+    private void setPathTransition(Cell currentCell,Cell emptyCell) {
+        pathTransition.setOnFinished((ActionEvent actionEvent) -> {
+            swap(currentCell, emptyCell);
+            countBoard.updateNumberOfMovements();
+            if (checkedSolved(cellsList)) {
+                stopCountAndPopupWindow();
+            }
+        });
+    }
 }

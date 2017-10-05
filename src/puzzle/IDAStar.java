@@ -11,23 +11,26 @@ package puzzle;
  */
 public class IDAStar {
 
-    private  static final int MAXSTEP = 200;
-    private  static final int[] directionX = {1, 0, -1, 0};
-    private  static final int[] directionY = {0, 1, 0, -1};
+    private static final int MAXSTEP = 200;
+    private static final int[] directionX = {1, 0, -1, 0};
+    private static final int[] directionY = {0, 1, 0, -1};
 
-    private  static final char[] direction = {'d', 'r', 'u', 'l'};
-    private  static final int[] oppositeDirection = {2, 3, 0, 1};
+    private static final char[] direction = {'d', 'r', 'u', 'l'};
+    private static final int[] oppositeDirection = {2, 3, 0, 1};
 
     private int[][] tile;
     private int ORDER;
     private int upper = 0;
     private boolean pass;
     private int pathOfLength;
-    private char[] pathOfMovement;
-    private StringBuilder routine ;
-    
+    private StringBuilder routine;
+
+    /**
+     *
+     * @param array
+     */
     public IDAStar(int[] array) {
-       
+
         ORDER = (int) Math.sqrt(array.length);
         pathOfLength = 0;
 
@@ -37,8 +40,16 @@ public class IDAStar {
         }
     }
 
+    /**
+     *
+     * @param depth
+     * @param row
+     * @param col
+     * @param est
+     * @param preDirection
+     */
     public void IDAS(int depth, int row, int col, int est, int preDirection) {
-        int length = ORDER*ORDER;
+        int length = ORDER * ORDER;
 
         if (est == 0 || this.pass) {
             this.pathOfLength = depth;
@@ -61,11 +72,10 @@ public class IDAStar {
                     if (depth + est + nCost - oCost + 1 <= upper) {
                         tile[row][col] = temp;
                         tile[newRow][newCol] = length - 1;
-                        pathOfMovement[depth] = direction[i];
-                        
+
                         routine.append(direction[i]);
                         routine.setCharAt(depth, direction[i]);
-                        
+
                         IDAS(depth + 1, newRow, newCol, est + nCost - oCost, oppositeDirection[i]);
                         tile[row][col] = length - 1;
                         tile[newRow][newCol] = temp;
@@ -98,8 +108,8 @@ public class IDAStar {
         return manhattanDistance;
     }
 
-    public String getPath() {    
-        return routine.substring(0,pathOfLength);
+    public String getPath() {
+        return routine.substring(0, pathOfLength);
     }
 
     public void init() {
@@ -114,9 +124,8 @@ public class IDAStar {
                 break;
             }
         }
-        pathOfMovement = new char[MAXSTEP];
         routine = new StringBuilder();
-        
+
         int cost = heuristic(this.tile);
         this.upper = Math.min(MAXSTEP, cost + 1);
         while (!this.pass) {

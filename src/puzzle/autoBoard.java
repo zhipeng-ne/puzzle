@@ -34,12 +34,11 @@ public class AutoBoard {
     private Text numberText = new Text("");
     private Text timeText = new Text("");
 
-    private static int[] array;
-    private int directionIndex;
-    private IDAStar iDAStar;
-    private static AutoMove movement;
-    private static boolean isMove;
-    private static String path;
+    private static int[] array;        //拼图的排列
+    private int directionIndex;        //方向字符串数组的下标
+    private IDAStar iDAStar;           //
+    private static AutoMove movement;  //
+    private static boolean isMove;     //在获得路径之后，判断拼图是否移动过
 
     public AutoBoard(int[] array) {
         this.array = array;
@@ -52,20 +51,16 @@ public class AutoBoard {
     }
 
     private void setPathButton() {
-
         btGetPath.setOnMouseClicked(e -> {
             calculate.setText("Calculating!");
             double startTime = System.currentTimeMillis();
 
-//            Runnable iDAStar = new IDAStar(array);
-//            Thread thread = new Thread(iDAStar);
-//            thread.start();
             iDAStar = new IDAStar(array);
             iDAStar.init();
             double endTime = System.currentTimeMillis();
             calculate.setText("");
 
-            System.out.println(iDAStar.getPath());
+            //System.out.println(iDAStar.getPath());
 
             pathText.setText(iDAStar.getPath());
             numberText.setText(String.valueOf(iDAStar.getPath().length()));
@@ -75,7 +70,7 @@ public class AutoBoard {
         });
 
     }
-
+    //自动拼图实际上就是播放动画，在获得路径后，按路径进行移动
     private void setAutoButton() {
         EventHandler<ActionEvent> eventHandler = e -> {
             movement.move(iDAStar.getPath().charAt(directionIndex));
@@ -83,9 +78,9 @@ public class AutoBoard {
         };
 
         btAutoPuzzle.setOnMouseClicked(e -> {
-            if (!isMove) {
+            if (!isMove && iDAStar.getPath().length()>0) {
                 Timeline animation = new Timeline(new KeyFrame(Duration.millis(300), eventHandler));
-                animation.setCycleCount(iDAStar.getPath().length());
+                animation.setCycleCount(iDAStar.getPath().length());    //设置timeline动画的轮数为路径长度
                 animation.play();
                 btAutoPuzzle.setDisable(true);
                 btGetPath.setDisable(true);
@@ -112,7 +107,7 @@ public class AutoBoard {
         return gridPane;
 
     }
-
+    //同步数据，这里能同步到是因为变量是静态的，下同（这样似乎不太科学，暂时想不到别的就这样啦）
     public static void syncMovement(AutoMove move) {
         movement = move;
     }
@@ -121,7 +116,7 @@ public class AutoBoard {
         array = list;
     }
 
-    public static void syncisMove(boolean move) {
+    public static void syncIsMove(boolean move) {
         isMove = move;
     }
 

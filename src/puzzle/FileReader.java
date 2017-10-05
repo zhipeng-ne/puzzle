@@ -19,30 +19,20 @@ import javafx.collections.ObservableList;
  */
 public class FileReader {
 
-    private int order;
+    private int ORDER;    //游戏的难度
     private File file;
-
-    /**
-     *
-     */
+    
     public ObservableList<RecorderData> data = FXCollections.observableArrayList();
 
-    /**
-     *类构造器
-     */
     public FileReader() {
         file = new File("src/data/data.dat");
     }
 
-    /**
-     *
-     * @param order 游戏的难度
-     */
     public FileReader(int order) {
-        this.order = order;
-        if (this.order == 3) {
+        this.ORDER = order;
+        if (this.ORDER == 3) {
             file = new File("src/data/data.dat");
-        } else if (this.order == 4) {
+        } else if (this.ORDER == 4) {
             file = new File("src/data/data1.dat");
         } else {
             file = new File("src/data/data2.dat");
@@ -50,12 +40,6 @@ public class FileReader {
 
     }
 
-    /**
-     * 读文件
-     *
-     * @throws ClassNotFoundException
-     * @throws IOException
-     */
     public void read() throws ClassNotFoundException, IOException {
         try (ObjectInputStream input
                 = new ObjectInputStream(new FileInputStream(file));) {
@@ -68,11 +52,6 @@ public class FileReader {
         }
     }
 
-    /**
-     * 
-     *
-     * @return 读入的数据
-     */
     public ObservableList<RecorderData> getData() {
         return data;
     }

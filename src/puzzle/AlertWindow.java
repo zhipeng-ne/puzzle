@@ -43,7 +43,7 @@ public class AlertWindow {
 
     public void start() {
         alertStage.setTitle("Message");
-        alertStage.initModality(Modality.APPLICATION_MODAL);
+        alertStage.initModality(Modality.APPLICATION_MODAL);  //将窗口设为模态窗口
         alertStage.setMinWidth(300);
         alertStage.setMinHeight(150);
 
@@ -72,7 +72,7 @@ public class AlertWindow {
         btClose.setOnAction(e -> alertStage.close());
         btRecord.setOnAction(e -> {
             alertStage.close();
-            RankList list = new RankList("", times, numberOfMovements);
+            RankList list = new RankList( times, numberOfMovements);
             list.start();
         });
     }

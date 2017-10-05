@@ -22,13 +22,15 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import static puzzle.MainWindow.ORDER;
+
 /**
  *
  * @author zpppppp
  */
 public class RankList {
 
-    private String name;
+    private transient TableView tableView = new TableView();
+
     private int times;
     private int number;
 
@@ -37,34 +39,25 @@ public class RankList {
     private Button fourOrderButton = new Button("4X4");
     private Button fiveOrderButton = new Button("5X5");
 
-    private transient TableView tableView = new TableView();
+    private transient TextField nameField = new TextField();
+    private transient TextField timeField = new TextField();
+    private transient TextField numberField = new TextField();
+    private transient Button btAdd = new Button("Add");
 
-    private transient TextField addName = new TextField();
-    private transient TextField addTime = new TextField();
-    private transient TextField addNumber = new TextField();
-    private transient Button addButton = new Button("Add");
-    public transient ObservableList<RecorderData> data;
+    public transient ObservableList<RecorderData> data;             //读入记录的数据流
 
     public RankList() {
-        this.name = "";
         this.times = 0;
         this.number = 0;
     }
 
-    public RankList(String name, int times, int number) {
-        this.name = name;
+    public RankList(int times, int number) {
         this.times = times;
         this.number = number;
     }
 
     public void start() {
-        try {
-            FileReader fileReader = new FileReader();
-            fileReader.read();
-            data = fileReader.getData();
-        } catch (ClassNotFoundException | IOException e) {
-        }
-
+        readData(ORDER);
         try {
             setOrderButton();
         } catch (ClassNotFoundException | IOException e) {
@@ -74,30 +67,16 @@ public class RankList {
         fourOrderButton.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.ITALIC, 15));
         fiveOrderButton.setFont(Font.font("Arial", FontWeight.BOLD, FontPosture.ITALIC, 15));
 
-        HBox topBox = new HBox();
-        topBox.setPadding(new Insets(5, 5, 5, 5));
-        topBox.setSpacing(50);
-        topBox.getChildren().addAll(threeOrderButton, fourOrderButton, fiveOrderButton);
-
         initializeTableView();
-        setRecord();
-
+        displayAddPane();
         try {
-            addData();
+            setAddButton();
         } catch (IOException e) {
         }
 
-        HBox bottomBox = new HBox();
-        bottomBox.setPadding(new Insets(5, 5, 5, 5));
-        bottomBox.setSpacing(20);
-        bottomBox.getChildren().addAll(addName, addTime, addNumber, addButton);
-        
-        BorderPane borderPane = new BorderPane();
-        borderPane.setTop(topBox);
-        borderPane.setCenter(tableView);
-        borderPane.setBottom(bottomBox);
-        Scene scene = new Scene(borderPane, 600, 500);
+        BorderPane borderPane = createBorderPane();
 
+        Scene scene = new Scene(borderPane, 600, 500);
         scene.getStylesheets().add("css/rank.css");
         stage.setScene(scene);
         stage.setTitle("Ranking List");
@@ -105,12 +84,29 @@ public class RankList {
 
     }
 
-    public void setRecord() {
+    private BorderPane createBorderPane() {
+        BorderPane borderPane = new BorderPane();
+        HBox topBox = new HBox();
+        topBox.setPadding(new Insets(5, 5, 5, 5));
+        topBox.setSpacing(50);
+        topBox.getChildren().addAll(threeOrderButton, fourOrderButton, fiveOrderButton);
 
+        HBox bottomBox = new HBox();
+        bottomBox.setPadding(new Insets(5, 5, 5, 5));
+        bottomBox.setSpacing(20);
+        bottomBox.getChildren().addAll(nameField, timeField, numberField, btAdd);
+
+        borderPane.setTop(topBox);
+        borderPane.setCenter(tableView);
+        borderPane.setBottom(bottomBox);
+        return borderPane;
+    }
+
+    private void setRecord() {
         tableView.setItems(data);
     }
 
-    public void initializeTableView() {
+    private void initializeTableView() {
 
         tableView.setEditable(false);
         TableColumn nameCol = new TableColumn("Name");
@@ -128,53 +124,56 @@ public class RankList {
         tableView.getColumns().addAll(nameCol, timesCol, moveTimesCol);
     }
 
-    public void addData() throws IOException {
-        addName.setEditable(true);
-        addTime.setEditable(false);
-        addNumber.setEditable(false);
+    private void displayAddPane() {
+        nameField.setEditable(true);
+        timeField.setEditable(false);
+        numberField.setEditable(false);
 
-        addName.setText("Please enter your name!");
-        addName.setOnMouseClicked(e -> {
-            addName.setText("");
+        nameField.setText("Please enter your name!");
+        nameField.setOnMouseClicked(e -> {
+            nameField.setText("");
         });
-        addTime.setText(String.valueOf(times));
-        addNumber.setText(String.valueOf(number));
-        setAddButton();
+        timeField.setText(String.valueOf(times));
+        numberField.setText(String.valueOf(number));
+
     }
 
-    public void setAddButton() {
+    private void setAddButton() throws IOException {
+        //为了将记录添加到对应的文件，要将对应的文件先读一遍，将数据流刷新一遍
+        //然后将新记录加到数据流中，最后再写进文件中
+        readData(ORDER);
+        btAdd.setOnAction(e -> {
+            writeRecordInFile();
+            nameField.clear();
+            timeField.clear();
+            numberField.clear();
+            btAdd.setDisable(true);
+            nameField.setEditable(false);
+        });
+    }
+
+    //读取数据
+    private void readData(int order) {
         try {
-            FileReader fileReader = new FileReader(MainWindow.ORDER);
+            FileReader fileReader = new FileReader(order);
             fileReader.read();
             data = fileReader.getData();
             setRecord();
         } catch (ClassNotFoundException | IOException ex) {
-
         }
-        addButton.setOnAction(e -> {
-            data.add(new RecorderData(new Record(addName.getText(), times, number)));
-            addName.clear();
-            addTime.clear();
-            addNumber.clear();
-
-            try {
-                FileWriter fileWriter = new FileWriter(data, ORDER);
-                fileWriter.write();
-            } catch (IOException ex) {
-            }
-            addButton.setDisable(true);
-            addName.setEditable(false);
-        });
     }
 
-    public void disableAddFunction() {
-        addButton.setDisable(true);
-        addName.setDisable(true);
-        addTime.setDisable(true);
-        addNumber.setDisable(true);
+    //将记录写入文件
+    private void writeRecordInFile() {
+        data.add(new RecorderData(new Record(nameField.getText(), times, number)));
+        try {
+            FileWriter fileWriter = new FileWriter(data, ORDER);
+            fileWriter.write();
+        } catch (IOException ex) {
+        }
     }
 
-    public void setOrderButton() throws ClassNotFoundException, IOException {
+    private void setOrderButton() throws ClassNotFoundException, IOException {
         threeOrderButton.setOnMouseClicked(e -> {
             readData(3);
         });
@@ -184,19 +183,13 @@ public class RankList {
         fiveOrderButton.setOnMouseClicked(e -> {
             readData(5);
         });
-
     }
 
-    private void readData(int order) {
-        try {
-            FileReader fileReader = new FileReader(order);
-            fileReader.read();
-            data = fileReader.getData();
-            setRecord();
-        } catch (ClassNotFoundException | IOException ex) {
-
-        }
-        stage.show();
-
+    public void disableAddFunction() {
+        btAdd.setDisable(true);
+        nameField.setDisable(true);
+        timeField.setDisable(true);
+        numberField.setDisable(true);
     }
+
 }

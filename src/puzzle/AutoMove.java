@@ -33,6 +33,7 @@ public class AutoMove extends Move {
         Path path = getPath(currentCell, emptyCell);
         pathTransition = getPathTransition(currentCell, path);
         setPathTransition(currentCell, emptyCell);
+        pathTransition.play();
     }
 
     //获取当前需要移动的Cell

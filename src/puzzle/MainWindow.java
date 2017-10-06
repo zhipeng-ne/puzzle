@@ -29,16 +29,16 @@ public class MainWindow {
 
     private Pane pane = new Pane();
     private ImageView referPicture;                     //参考图片
-    private CountBoard countBoard = new CountBoard();   
+    private CountBoard countBoard = new CountBoard();
     private GridPane countPane;                         //计数面板
-    private AutoBoard autoBoard;                         
+    private AutoBoard autoBoard;
     private GridPane autoPane;                          //自动拼图面板
     private MenuBar menuBar;                            //主菜单
 
     private final double SCENE_WUDTH = 1024;            //游戏窗口大小
     private final double SCENE_HEIGHT = 640;
     public static final double offsetX = 0;             //面板的偏移量
-    public static final double offsetY = 30; 
+    public static final double offsetY = 30;
     ArrayList<Cell> cellsList = new ArrayList<>();      //存放图块的数组   
     public static int ORDER;                            //游戏的难度
     public int CELLSIZE = 100;                          //每个图块的大小
@@ -62,7 +62,7 @@ public class MainWindow {
     public void start(Stage stage) {
         CELLSIZE = (int) image.getWidth() / ORDER;
         initialize();
-        addMounseEventInCellAndAddImage();
+        addMounseEventInCellAndRelocateImage();
         setReferPicture();
         setCountBoard();
         setAutoBoard();
@@ -85,37 +85,48 @@ public class MainWindow {
         for (int i = 0; i < ran.length; i++) {
             ImageView imageBlock = new ImageView(image);
 
-            int minX = ran[i] % ORDER;
+            int minX = ran[i] % ORDER;      //在图片上将对应位置上的图块切出来
             int minY = ran[i] / ORDER;
             Rectangle2D rectangle2D = new Rectangle2D(CELLSIZE * minX,
                     CELLSIZE * minY, CELLSIZE, CELLSIZE);
             imageBlock.setViewport(rectangle2D);
-            //这里将排列的最大数设为空图块，即右下角的图块总为空
+            //将排列的最大数设为空图块，即右下角的图块总为空
             if (ran[i] == ORDER * ORDER - 1) {
                 imageBlock = null;
             }
-            cellsList.add(new Cell(i % ORDER, i / ORDER, imageBlock,i,ran[i]));
+            cellsList.add(new Cell(i % ORDER, i / ORDER, imageBlock, i, ran[i]));
         }
 
     }
 
-    private void addMounseEventInCellAndAddImage() {
+    private void addMounseEventInCellAndRelocateImage() {
         for (int i = 0; i < cellsList.size(); i++) {
             Cell currentCell = cellsList.get(i);
             Node imageView = currentCell.getImageView();
             if (imageView == null) {
                 continue;
             }
-            imageView.addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-                NormalMove movement = new NormalMove(cellsList, countBoard, CELLSIZE, offsetX, offsetY);
-                movement.move((Node) mouseEvent.getSource());
-            });
-            ImageView currentImageView = currentCell.getImageView();
-            imageView.relocate(currentCell.getX() * CELLSIZE + offsetX, currentCell.getY() * CELLSIZE + offsetY);
-            pane.getChildren().add(currentImageView);
+            addMounseEventInCell(imageView);
+            relocateImage(currentCell, imageView);
         }
     }
 
+    //重组图片
+    private void relocateImage(Cell currentCell, Node imageView) {
+        ImageView currentImageView = currentCell.getImageView();
+        imageView.relocate(currentCell.getX() * CELLSIZE + offsetX, currentCell.getY() * CELLSIZE + offsetY);
+        pane.getChildren().add(currentImageView);
+    }
+
+    ////给图片添加点击事件
+    private void addMounseEventInCell(Node imageView) {
+        imageView.addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            NormalMove movement = new NormalMove(cellsList, countBoard, CELLSIZE, offsetX, offsetY);
+            movement.move((Node) mouseEvent.getSource());
+        });
+    }
+
+    //设置参考图片
     private void setReferPicture() {
         ReferPicture refer = new ReferPicture(image);
         referPicture = refer.getPicture();
@@ -123,12 +134,14 @@ public class MainWindow {
         pane.getChildren().add(referPicture);
     }
 
+    //设置计数面板
     private void setCountBoard() {
         countPane = countBoard.createBoard();
         countPane.relocate(CELLSIZE * ORDER + offsetX + 30, 340);
         pane.getChildren().add(countPane);
     }
 
+    //设置自动拼图面板
     private void setAutoBoard() {
         AutoMove movement = new AutoMove(cellsList, countBoard, CELLSIZE, offsetX, offsetY);
         autoBoard = new AutoBoard(getArray(cellsList));
@@ -139,6 +152,7 @@ public class MainWindow {
         pane.getChildren().add(autoPane);
     }
 
+    //设置菜单
     private void setMenu(Stage stage) {
         MainMenu mainMenu = new MainMenu(stage);
         menuBar = mainMenu.createMenuBar();

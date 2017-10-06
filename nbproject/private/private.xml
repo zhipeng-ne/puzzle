@@ -4,28 +4,30 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/D:/github/puzzle/src/puzzle/AlertWindow.java</file>
-            <file>file:/D:/github/puzzle/src/puzzle/RecorderData.java</file>
             <file>file:/D:/github/puzzle/src/puzzle/FileReader.java</file>
-            <file>file:/D:/github/puzzle/src/css/image/back.jpg</file>
-            <file>file:/D:/github/puzzle/src/puzzle/RankList.java</file>
             <file>file:/D:/github/puzzle/src/puzzle/AutoBoard.java</file>
-            <file>file:/D:/github/puzzle/src/puzzle/InitialWindow.java</file>
-            <file>file:/D:/github/puzzle/src/puzzle/FileWriter.java</file>
             <file>file:/D:/github/puzzle/src/puzzle/ImageChooser.java</file>
             <file>file:/D:/github/puzzle/src/puzzle/Move.java</file>
-            <file>file:/D:/github/puzzle/src/puzzle/AutoMove.java</file>
-            <file>file:/D:/github/puzzle/src/image/witcher09.png</file>
-            <file>file:/D:/github/puzzle/src/puzzle/MainWindow.java</file>
             <file>file:/D:/github/puzzle/src/puzzle/MainMenu.java</file>
-            <file>file:/D:/github/puzzle/src/puzzle/Operation.java</file>
-            <file>file:/D:/github/puzzle/src/puzzle/Record.java</file>
             <file>file:/D:/github/puzzle/src/puzzle/Cell.java</file>
-            <file>file:/D:/github/puzzle/src/puzzle/CountBoard.java</file>
             <file>file:/D:/github/puzzle/src/puzzle/ReferPicture.java</file>
             <file>file:/D:/github/puzzle/src/puzzle/IDAStar.java</file>
             <file>file:/D:/github/puzzle/src/puzzle/RandomArray.java</file>
-            <file>file:/D:/github/puzzle/src/css/image/background.jpg</file>
+            <file>file:/D:/github/puzzle/src/puzzle/MoveToAbs.java</file>
             <file>file:/D:/github/puzzle/src/puzzle/NormalMove.java</file>
+            <file>file:/D:/github/puzzle/src/puzzle/RecorderData.java</file>
+            <file>file:/D:/github/puzzle/src/css/image/back.jpg</file>
+            <file>file:/D:/github/puzzle/src/puzzle/RankList.java</file>
+            <file>file:/D:/github/puzzle/src/puzzle/InitialWindow.java</file>
+            <file>file:/D:/github/puzzle/src/puzzle/FileWriter.java</file>
+            <file>file:/D:/github/puzzle/src/puzzle/AutoMove.java</file>
+            <file>file:/D:/github/puzzle/src/image/witcher09.png</file>
+            <file>file:/D:/github/puzzle/src/puzzle/MainWindow.java</file>
+            <file>file:/D:/github/puzzle/src/puzzle/Operation.java</file>
+            <file>file:/D:/github/puzzle/src/puzzle/Record.java</file>
+            <file>file:/D:/github/puzzle/src/puzzle/CountBoard.java</file>
+            <file>file:/D:/github/puzzle/src/css/image/background.jpg</file>
+            <file>file:/D:/github/puzzle/src/puzzle/LineToAbs.java</file>
         </group>
     </open-files>
 </project-private>

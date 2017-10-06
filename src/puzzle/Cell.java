@@ -63,9 +63,6 @@ public class Cell {
     public boolean isSolved(){
         return this.validIndex==this.currentIndex;
     }
-    public String toString(){
-        return "x: "+this.x+" y: "+this.y;
-    }
     
 }
     

@@ -26,19 +26,19 @@ public class RandomArray {
 
     //    生成num个不重复数
     public static int[] generateRandomArray(int num) {
-        int r[] = new int[num];
+        int[] array = new int[num];
         Random random = new Random();
-        for (int i = 0; i < r.length -1; i++) {
-            r[i] = random.nextInt(num -1);
+        for (int i = 0; i < array.length -1; i++) {
+            array[i] = random.nextInt(num -1);
             for (int j = 0; j < i; j++) {
-                if (r[i] == r[j]) {
+                if (array[i] == array[j]) {
                     i--;
                     break;
                 }
             }
         }    //这里把最大的数放在了排列的末尾，一开始是为了美观，后来发现这样好像可以降低搜索难度—_—!
-        r[r.length - 1] = num - 1;  
-        return r;
+        array[array.length - 1] = num - 1;  
+        return array;
     }
 
     //    求逆序数

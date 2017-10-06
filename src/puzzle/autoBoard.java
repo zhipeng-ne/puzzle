@@ -38,8 +38,8 @@ public class AutoBoard {
     private int directionIndex;        //方向字符串数组的下标
     private IDAStar iDAStar;           //
     private static AutoMove movement;  //
-    private static boolean isMove;     //在获得路径之后，判断拼图是否移动过
-
+    private static boolean isMove;     //在获得路径之后，判断拼图是否移动过，因为这里获得路径和自动拼图是分开的，
+                                        //移动之后的拼图路径显然不是原来的路径
     public AutoBoard(int[] array) {
         this.array = array;
         init();
@@ -47,7 +47,7 @@ public class AutoBoard {
 
     private void init() {
         setPathButton();
-        setAutoButton();
+        setAutoPuzzleButton();
     }
 
     private void setPathButton() {
@@ -70,22 +70,21 @@ public class AutoBoard {
         });
 
     }
-    //自动拼图实际上就是播放动画，在获得路径后，按路径进行移动
-    private void setAutoButton() {
+    
+    private void setAutoPuzzleButton() {
+        //自动拼图实际上就是播放动画，在获得路径后，按路径进行移动
         EventHandler<ActionEvent> eventHandler = e -> {
             movement.move(iDAStar.getPath().charAt(directionIndex));
             directionIndex++;
         };
-
         btAutoPuzzle.setOnMouseClicked(e -> {
-            if (!isMove && iDAStar.getPath().length()>0) {
+            if (!isMove && iDAStar.getPath().length()>0) {  //获得路径后未移动拼图且路径长度大于0
                 Timeline animation = new Timeline(new KeyFrame(Duration.millis(300), eventHandler));
                 animation.setCycleCount(iDAStar.getPath().length());    //设置timeline动画的轮数为路径长度
                 animation.play();
                 btAutoPuzzle.setDisable(true);
                 btGetPath.setDisable(true);
             }
-
         });
     }
 

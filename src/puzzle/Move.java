@@ -60,7 +60,6 @@ public class Move {
         pathTransition.setOrientation(PathTransition.OrientationType.NONE);
         pathTransition.setCycleCount(1);
         pathTransition.setAutoReverse(false);
-        pathTransition.play();
 
         return pathTransition;
     }

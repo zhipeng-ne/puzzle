@@ -17,6 +17,7 @@ import static puzzle.AutoBoard.syncIsMove;
  *
  * @author zpppppp
  */
+//这个类对应鼠标点击来移动图块
 public class NormalMove extends Move {
 
     private PathTransition pathTransition;
@@ -49,6 +50,8 @@ public class NormalMove extends Move {
         Path path = getPath(currentCell, emptyCell);
         pathTransition = getPathTransition(currentCell, path);
         setPathTransition(currentCell, emptyCell);
+        pathTransition.play();
+        
     }
 
     private Cell getCurrentCell(ArrayList<Cell> list, Node node) {
@@ -72,7 +75,7 @@ public class NormalMove extends Move {
         });
     }
 
-    //同步数据
+    //同步数据，能同步是因为变量是静态的
     public void syncData() {
         countBoard.updateNumberOfMovements();
         AutoMove move = new AutoMove(cellsList, countBoard, super.getCELLSIZE(), super.getOffsetX(), super.getOffsetY());
